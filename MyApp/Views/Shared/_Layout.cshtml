@@ -93,6 +93,7 @@
     lib = window["@@servicestack/client"];
     for (var k in lib) { window[k] = lib[k] }
     client = new JsonServiceClient('/');
+    // regen dtos: `web ts && tsc wwwroot/assets/js/dtos.ts`
   </script>
 
   @RenderSection("scripts", required: false)
