@@ -9,7 +9,7 @@
     <form action="/register" method="post">
         <div class="form-group">
             <div class="form-group" data-validation-summary="displayName,email,password,confirmPassword"></div>
-            @Html.HiddenInputs(new { @continue = Request.QueryString["redirect"] })
+            @Html.HiddenInputs(new { @continue = Html.Query("redirect") })
         </div>
         <div class="form-group">
             <input class="form-control form-control-lg" name="displayName" type="text" placeholder="Display Name">

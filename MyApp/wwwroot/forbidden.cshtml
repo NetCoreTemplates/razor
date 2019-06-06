@@ -1,9 +1,9 @@
 <div class="forbidden">
     <h3>
         You are not authorized to access
-        @if (Request.QueryString["path"] != null)
+        @if (Html.Query("path") != null)
         {
-            <code>@Request.QueryString["path"]</code>
+            <code>@Html.Query("path")</code>
         }
         else
         {
@@ -11,16 +11,16 @@
         }
     </h3>
 
-    @if (Request.QueryString["message"] != null)
+    @if (Html.Query("message") != null)
     {
-        <p>@Request.QueryString["message"]</p>
+        <p>@Html.Query("message")</p>
     }
-    else if (Request.QueryString["role"] != null)
+    else if (Html.Query("role") != null)
     {
-        <p>Missing role <code>@Request.QueryString["role"]</code></p>
+        <p>Missing role <code>@Html.Query("role")</code></p>
     }
-    else if (Request.QueryString["permission"] != null)
+    else if (Html.Query("permission") != null)
     {
-        <p>Missing permission <code>@Request.QueryString["permission"]</code></p>
+        <p>Missing permission <code>@Html.Query("permission")</code></p>
     }
 </div>

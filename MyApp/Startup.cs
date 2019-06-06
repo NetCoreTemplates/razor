@@ -46,8 +46,6 @@ namespace MyApp
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
            });
-
-            app.Use(new RazorHandler("/notfound"));            
         }
     }
 
