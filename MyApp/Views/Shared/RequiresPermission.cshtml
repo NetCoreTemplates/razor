@@ -1,0 +1,7 @@
+@model string
+
+@{
+    RedirectIfNotAuthenticated();
+
+    await AssertPermissionAsync(Model);
+}

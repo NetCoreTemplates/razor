@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using System.Net;
 using Funq;
 using ServiceStack;
 using ServiceStack.Mvc;
@@ -10,14 +11,14 @@ using MyApp.ServiceInterface;
 
 namespace MyApp
 {
-    public class Startup
+    public class Startup : ModularStartup
     {
-        public IConfiguration Configuration { get; }
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        public Startup(IConfiguration configuration) 
+            : base(configuration, typeof(MyServices).Assembly) {}
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public new void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
         }
@@ -68,6 +69,11 @@ namespace MyApp
             }
 
             Plugins.Add(new RazorFormat());
+
+            this.CustomErrorHttpHandlers[HttpStatusCode.NotFound] = new RazorHandler("/notfound");
+            this.CustomErrorHttpHandlers[HttpStatusCode.Forbidden] = new RazorHandler("/forbidden");
+
+            Svg.CssFillColor["svg-icons"] = "#E91E63";
         }
     }
 }
