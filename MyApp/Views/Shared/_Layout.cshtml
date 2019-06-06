@@ -1,5 +1,6 @@
 @{ 
-  var min = DebugMode ? "" : ".min"; 
+  var debug = DebugMode;
+  var min = debug ? "" : "[hash].min";
 }
 
 <!DOCTYPE html>
@@ -11,19 +12,27 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  @Html.BundleCss(new BundleOptions {
-      Sources = {
-          "/assets/css/bootstrap.css",
-          "/css/buttons.css",
-          "/css/svg-auth.css",
-          "/css/svg-icons.css",
-          "/assets/css/",
-      },
-      Minify = !DebugMode,
-      Cache = !DebugMode,
-      SaveToDisk = !DebugMode,
-      OutputTo = $"/css/bundle{min}.css"
-  })
+    @Html.BundleCss(new BundleOptions {
+        Sources = {
+            "!/assets/css/default.css",
+            "/assets/css/",
+            "/css/buttons.css",
+            "/css/svg-auth.css",
+            "/css/svg-icons.css",
+        },
+        SaveToDisk = !debug,
+        OutputTo = $"/css/lib.bundle{min}.css"
+    })
+
+    @Html.BundleCss(new BundleOptions {
+        Sources = {
+            "/assets/css/default.css",
+        },
+        Minify = !debug,
+        Cache = !debug,
+        SaveToDisk = !debug,
+        OutputTo = $"/css/bundle{min}.css"
+    })
 
   <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
 </head>
@@ -60,13 +69,12 @@
   <script>exports = window</script>
   @Html.BundleJs(new BundleOptions {
       Sources = {
+          "!/assets/js/dtos.js",
+          "!/assets/js/default.js",
           "/assets/js/jquery.min.js",
-          "/assets/js/bootstrap.min.js",
-          "/assets/js/servicestack-client.min.js",
+          "/assets/js/",
       },
-      Minify = !DebugMode,
-      Cache = !DebugMode,
-      SaveToDisk = !DebugMode,
+      SaveToDisk = !debug,
       OutputTo = $"/js/lib.bundle{min}.js"
   })
     
@@ -75,9 +83,9 @@
           "/assets/js/dtos.js",
           "/assets/js/default.js",
       },
-      Minify = !DebugMode,
-      Cache = !DebugMode,
-      SaveToDisk = !DebugMode,
+      Minify = !debug,
+      Cache = !debug,
+      SaveToDisk = !debug,
       OutputTo = $"/js/bundle{min}.js"
   })
 
