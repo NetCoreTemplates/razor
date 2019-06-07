@@ -16,7 +16,7 @@ namespace MyApp
 
         public void Configure(IAppHost appHost)
         {
-            CreateUser(appHost.TryResolve<IAuthRepository>(), 
+            CreateUser(appHost.Resolve<IAuthRepository>(), 
                 "admin@email.com", "Admin User", "p@55wOrd", roles:new[]{ RoleNames.Admin });
         }
 
