@@ -58,7 +58,8 @@ namespace MyApp
         {
             base.SetConfig(new HostConfig
             {
-                DebugMode = AppSettings.Get(nameof(HostConfig.DebugMode), false)
+                UseSameSiteCookies = true,
+                DebugMode = AppSettings.Get(nameof(HostConfig.DebugMode), HostingEnvironment.IsDevelopment()),
             });
 
             if (Config.DebugMode)

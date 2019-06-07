@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using Funq;
 using ServiceStack;
@@ -16,23 +17,23 @@ namespace MyApp
             var AppSettings = appHost.AppSettings;
             appHost.Plugins.Add(new AuthFeature(() => new CustomUserSession(),
                 new IAuthProvider[] {
-                    new CredentialsAuthProvider(), //Enable UserName/Password Credentials Auth
-                    new TwitterAuthProvider(AppSettings),
-                    new FacebookAuthProvider(AppSettings),
-                    new GoogleAuthProvider(AppSettings),
+                    new CredentialsAuthProvider(AppSettings),     /* Sign In with Username / Password credentials */
+                    new FacebookAuthProvider(AppSettings),        /* Create Facebook App at: https://developers.facebook.com/apps */
+                    new GoogleAuthProvider(AppSettings),          /* Create App https://console.developers.google.com/apis/credentials */
+                    new MicrosoftGraphAuthProvider(AppSettings),  /* Create App https://apps.dev.microsoft.com */
                 }));
 
             appHost.Plugins.Add(new RegistrationFeature()); //Enable /register Service
 
             //override the default registration validation with your own custom implementation
             appHost.RegisterAs<CustomRegistrationValidator, IValidator<Register>>();
-
-            //appHost.Register<ICacheClient>(new MemoryCacheClient()); //Store User Sessions in Memory Cache (default)
         }
     }
     
-    // Type class to store additional metadata in Users Session
-    public class CustomUserSession : AuthUserSession {}
+    // Add any additional metadata properties you want to store in the Users Typed Session
+    public class CustomUserSession : AuthUserSession 
+    {
+    }
     
     // Custom Validator to add custom validators to built-in /register Service requiring DisplayName and ConfirmPassword
     public class CustomRegistrationValidator : RegistrationValidator

@@ -1,5 +1,11 @@
 @{
     ViewBag.Title = "Sign In";
+
+    if (IsAuthenticated)
+    {
+        RedirectTo(Html.Query("redirect") ?? "/");
+        return;
+    }
 }
 
 <div class="row">
