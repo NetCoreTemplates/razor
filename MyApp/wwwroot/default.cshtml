@@ -3,12 +3,16 @@
 }
 
 <div class="row justify-content-between">
-  <div class="col col-4">
+  <div class="col col-1">
+    <i class="svg-home svg-9x"></i>
+  </div>
+  <div class="col col-4 mt-4">
     <div class="form-group">
-        <input placeholder="Your name" id="txtName" class="form-control form-control-lg">
-        <h3 class="result"></h3>
+      <input placeholder="Your name" id="txtName" class="form-control form-control-lg">
+      <h3 class="result"></h3>
     </div>
   </div>
+  <div class="col-md-auto"></div>
   <div class="col col-4">
     @if (IsAuthenticated)
     {
@@ -33,7 +37,7 @@
   var txtName = document.querySelector('#txtName'),
        result = document.querySelector('.result');
       
-  txtName.addEventListener('keyup', function(e) {
+  function callApi() {
     var name = txtName.value;
     if (name) {
       client.get(new Hello({ name: name }))
@@ -43,6 +47,10 @@
     } else {
       result.innerHTML = '';
     }
-  });
+  }
+  txtName.addEventListener('keyup', callApi);
+
+  txtName.value = 'Razor';
+  callApi();
 </script>
 }
