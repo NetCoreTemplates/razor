@@ -71,9 +71,6 @@ namespace MyApp
 
             this.CustomErrorHttpHandlers[HttpStatusCode.NotFound] = new RazorHandler("/notfound");
             this.CustomErrorHttpHandlers[HttpStatusCode.Forbidden] = new RazorHandler("/forbidden");
-
-            Svg.Load(RootDirectory.GetDirectory("/assets/svg"));
-            Svg.CssFillColor["svg-icons"] = "#343a40";
         }
     }
 }
