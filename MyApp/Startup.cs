@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using System.Net;
 using Funq;
 using ServiceStack;
 using ServiceStack.Mvc;
@@ -68,9 +67,6 @@ namespace MyApp
             }
 
             Plugins.Add(new RazorFormat());
-
-            this.CustomErrorHttpHandlers[HttpStatusCode.NotFound] = new RazorHandler("/notfound");
-            this.CustomErrorHttpHandlers[HttpStatusCode.Forbidden] = new RazorHandler("/forbidden");
         }
     }
 }
