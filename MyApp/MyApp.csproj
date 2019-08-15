@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <!-- Disable pre-compilation required for advanced features like: https://docs.servicestack.net/netcore-razor#page-based-routing-in-razor  -->
+    <!-- <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish> -->
   </PropertyGroup>
 
   <ItemGroup>
