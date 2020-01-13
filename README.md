@@ -6,7 +6,7 @@
 
 > Browse [source code](https://github.com/NetCoreTemplates/razor), view live demo [razor.web-templates.io](http://razor.web-templates.io) and install with [dotnet-new](http://docs.servicestack.net/dotnet-new):
 
-    $ dotnet tool install -g web
+    $ dotnet tool install -g x
 
-    $ web new razor ProjectName
+    $ x new razor ProjectName
 
