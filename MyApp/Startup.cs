@@ -19,8 +19,7 @@ namespace MyApp
         public new void ConfigureServices(IServiceCollection services)
         {
 #if DEBUG
-            services.AddMvc(options => options.EnableEndpointRouting = false)
-                .AddRazorRuntimeCompilation();
+            services.AddMvc(options => options.EnableEndpointRouting = false).AddRazorRuntimeCompilation();
 #else
             services.AddMvc(options => options.EnableEndpointRouting = false);
 #endif
