@@ -8,7 +8,6 @@ using ServiceStack;
 using ServiceStack.Mvc;
 using ServiceStack.Configuration;
 using MyApp.ServiceInterface;
-using ServiceStack.Host.Handlers;
 
 namespace MyApp
 {
@@ -58,7 +57,6 @@ namespace MyApp
         // Configure your AppHost with the necessary configuration and dependencies your App needs
         public override void Configure(Container container)
         {
-//            var h = new StaticFileHandler();
             base.SetConfig(new HostConfig
             {
                 UseSameSiteCookies = true,
