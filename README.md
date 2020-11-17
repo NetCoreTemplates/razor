@@ -1,6 +1,6 @@
 # razor
 
-.NET Core 3.1 ServiceStack.Razor Bootstrap Website
+.NET Core 5.0 ServiceStack.Razor Bootstrap Website
 
 [![](https://raw.githubusercontent.com/ServiceStack/Assets/master/csharp-templates/razor.png)](http://razor.web-templates.io/)
 
