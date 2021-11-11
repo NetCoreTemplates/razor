@@ -1,22 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using ServiceStack;
 using ServiceStack.Mvc;
+using System.Net;
 
-namespace MyApp
+[assembly: HostingStartup(typeof(MyApp.ConfigureUi))]
+
+namespace MyApp;
+
+public class ConfigureUi : IHostingStartup
 {
-    public class ConfigureUi : IConfigureAppHost
-    {
-        public void Configure(IAppHost appHost)
-        {
+    public void Configure(IWebHostBuilder builder) => builder
+        .ConfigureAppHost(appHost => {
             appHost.CustomErrorHttpHandlers[HttpStatusCode.NotFound] = new RazorHandler("/notfound");
             appHost.CustomErrorHttpHandlers[HttpStatusCode.Forbidden] = new RazorHandler("/forbidden");
 
             Svg.Load(appHost.RootDirectory.GetDirectory("/assets/svg"));
             Svg.CssFillColor["svg-icons"] = "#343a40";
-        }
-    }
+        });
 }
-
