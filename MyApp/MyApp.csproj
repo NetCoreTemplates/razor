@@ -7,6 +7,10 @@
     <!-- Disabling pre-compilation is required for advanced features like: https://docs.servicestack.net/netcore-razor#page-based-routing-in-razor  -->
     <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
+  <ItemGroup>
+    <Using Include="MyApp" />
+    <Using Include="ServiceStack" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
