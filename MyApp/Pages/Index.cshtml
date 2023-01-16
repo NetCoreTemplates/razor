@@ -1,0 +1,53 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container mx-auto px-5">
+    <section class="flex-col md:flex-row flex items-center md:justify-between mt-16 mb-16 md:mb-12">
+        <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-tight md:pr-8">Razor Pages</h1>
+        <div class="flex flex-col">
+            <h4 class="text-lg mt-5">A Modern Razor Pages <a href="https://tailwindcss.com/" class="@Css.LinkUnderline">Tailwind</a> App with
+                <a href="https://vuejs.org" class="@Css.LinkUnderline">Vue.js</a>,
+                Markdown &amp; <a href="https://servicestack.net" class="@Css.LinkUnderline">ServiceStack</a>.
+            </h4>
+            <div class="flex justify-between items-center">
+                <div id="hello-api" class="mr-4"></div>
+                @Html.SrcComponent("HelloApi.mjs", size:"w-8 h-8 mt-2")
+            </div>
+        </div>
+    </section>
+</div>
+
+<section>
+    <h2 class="text-4xl md:text-6xl font-bold tracking-tighter leading-tight md:pr-8 whitespace-nowrap text-center pt-8">
+        Getting Started
+    </h2>
+    <div class="mb-8 md:mb-16">
+        <div class="sm:mx-0 sm:px-4 sm:py-8 flex justify-evenly">
+            <div id="getting-started"></div>
+        </div>
+        <div class="flex justify-center">
+            @Html.SrcComponent("GettingStarted.mjs")
+        </div>
+    </div>
+</section>
+
+<script type="module">
+import { $1, on } from "@@servicestack/client"
+import { client, mount } from "/mjs/app.mjs"
+import { Hello } from "/mjs/dtos.mjs"
+import HelloApi from "/mjs/components/HelloApi.mjs" 
+import GettingStarted from "/mjs/components/GettingStarted.mjs" 
+
+mount('#hello-api', HelloApi, { value: 'Razor Pages' })
+mount('#getting-started', GettingStarted, { template:'razor-tailwind' })
+
+on("#txtName", {
+    async keyup(e) {
+        let api = await client.api(new Hello({ name:e.target.value }))
+        $1('#result').innerHTML = api.response.result
+    },
+})
+</script>

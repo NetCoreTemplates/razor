@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="MyApp" />
+    <Using Include="ServiceStack" />
+    <Using Include="ServiceStack.Mvc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.30.*" />
+    <PackageReference Include="ServiceStack" Version="6.*" />
+    <PackageReference Include="ServiceStack.Mvc" Version="6.*" />
+    <PackageReference Include="ServiceStack.Server" Version="6.*" />
+      
+    <!-- Required for Razor compilation on change: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-5.0 -->
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyApp.ServiceInterface\MyApp.ServiceInterface.csproj" />
+    <ProjectReference Include="..\MyApp.ServiceModel\MyApp.ServiceModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\lib\js\bootstrap.mjs" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\js\popper.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\js\servicestack-client.mjs" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\js\servicestack-vue.mjs" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\js\vue.mjs" />
+  </ItemGroup>
+
+</Project>

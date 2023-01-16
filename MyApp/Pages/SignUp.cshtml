@@ -1,0 +1,97 @@
+@page
+@{
+    ViewBag.Title = "Sign Up";
+}
+
+<div class="container px-5 mb-32">
+    <div class="mx-auto max-w-lg">
+        <h2 class="py-8 text-center text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">
+            @ViewData["Title"]
+        </h2>
+        <div id="signup"></div>
+        <div class="hidden mt-5 flex justify-center" classes="remove hidden:load">
+            @Html.SrcRazorPage("SignUp.cshtml")
+        </div>
+    </div>
+</div>
+
+<template id="signup-template">
+    <form v-on:submit.prevent="onSubmit">
+        <div class="shadow overflow-hidden sm:rounded-md">
+            <error-summary except="displayName,userName,password,confirmPassword,autoLogin"></error-summary>
+            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                <div class="flex flex-col gap-y-4">
+                    <text-input id="displayName" help="Your first and last name" v-model="displayName"></text-input>
+                    <text-input id="userName" label="Email" placeholder="Email" help="" v-model="userName"></text-input>
+                    <text-input id="password" type="password" help="6 characters or more" v-model="password"></text-input>
+                    <text-input id="confirmPassword" type="password" v-model="confirmPassword"></text-input>
+                    <checkbox-input id="autoLogin" v-model="autoLogin"></checkbox-input>
+                </div>
+            </div>
+            <div class="pt-5 px-4 py-3 bg-gray-50 text-right sm:px-6">
+                <div class="flex justify-end">
+                    <form-loading class="flex-1"></form-loading>
+                    <primary-button class="ml-3">Sign Up</primary-button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="flex mt-8 ml-8">
+        <h3 class="mr-4 leading-8 text-gray-500">Quick Links</h3>
+        <span class="relative z-0 inline-flex shadow-sm rounded-md">
+            <button type="button" v-on:click="setUser('new@user.com')"
+                    class="-ml-px relative inline-flex items-center px-4 py-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                new@user.com
+            </button>
+        </span>
+    </div>
+</template>
+
+<script type="module">
+import { mount } from "/mjs/app.mjs"
+import { ref, watchEffect, nextTick } from "vue"
+import { $1, leftPart, rightPart, toPascalCase } from "@@servicestack/client"
+import { useClient } from "@@servicestack/vue"
+import { Register } from "/mjs/dtos.mjs"
+import { AppData } from "/mjs/app.mjs"
+
+const SignUp = {
+    template:$1('#signup-template'),
+    props: ['returnUrl'],
+    setup(props) {
+        const { api, setError } = useClient()
+        const displayName = ref("")
+        const userName = ref("")
+        const password = ref("")
+        const confirmPassword = ref("")
+        const autoLogin = ref(true)
+
+        const setUser = (email) => {
+            let first = leftPart(email, '@@')
+            let last = rightPart(leftPart(email, '.'), '@@')
+            displayName.value = toPascalCase(first) + ' ' + toPascalCase(last)
+            userName.value = email
+            confirmPassword.value = password.value = 'p@55wOrd'
+        }
+        const onSubmit = async (e) => {
+            if (password.value !== confirmPassword.value) {
+                setError({fieldName: 'confirmPassword', message: 'Passwords do not match'})
+                return
+            }
+            const r = await api(new Register({
+                displayName,
+                email: userName,
+                password,
+                confirmPassword,
+                autoLogin,
+            }))
+            if (r.succeeded) {
+                location.href = '/signin'
+            }
+        }
+        return { displayName, userName, password, confirmPassword, autoLogin, setUser, onSubmit }
+    }
+}
+mount('#signup', SignUp)
+</script>
