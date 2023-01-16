@@ -26,6 +26,8 @@ const files = {
 
 const path = require('path')
 const fs = require('fs')
+const dns = require('dns')
+dns.setDefaultResultOrder('ipv4first')
 
 Object.keys(files).forEach(dir => {
     const dirFiles = files[dir]
