@@ -38,15 +38,15 @@ Object.keys(files).forEach(dir => {
         if (!fs.existsSync(toDir)) {
             fs.mkdirSync(toDir, { recursive: true })
         }
-        download(url, toFile)
+        httpDownload(url, toFile, 5)
     })
 })
 
-function download(url, toFile, retries=5) {
+function httpDownload(url, toFile, retries) {
     const client = url.startsWith('https') ? https : http
     const retry = (e) => {
         console.log(`get ${url} failed: ${e}${retries > 0 ? `, ${retries-1} retries remaining...` : ''}`)
-        if (retries > 0) download(url, toFile, retries-1)
+        if (retries > 0) httpDownload(url, toFile, retries-1)
     }
 
     client.get(url, res => {
@@ -54,7 +54,7 @@ function download(url, toFile, retries=5) {
             let redirectTo = res.headers.location;
             if (redirectTo.startsWith('/'))
                 redirectTo = new URL(res.headers.location, new URL(url).origin).href
-            return download(redirectTo, toFile)
+            return httpDownload(redirectTo, toFile, retries)
         } else if (res.statusCode >= 400) {
             retry(`${res.statusCode} ${res.statusText || ''}`.trimEnd())
         }
@@ -65,4 +65,22 @@ function download(url, toFile, retries=5) {
             file.on('finish', () => file.close())
         }
     }).on('error', retry)
+}
+
+/** Alternative implementation using fetch (requires node 18+) */
+function fetchDownload(url, toFile, retries) {
+    (async () => {
+        for (let i=retries; i>=0; --i) {
+            try {
+                let r = await fetch(url)
+                if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+                let txt = await r.text()
+                console.log(`writing ${url} to ${toFile}`)
+                fs.writeFileSync(toFile, txt)
+                return
+            } catch (e) {
+                console.log(`get ${url} failed: ${e}${i > 0 ? `, ${i} retries remaining...` : ''}`)
+            }
+        }
+    })()
 }
