@@ -26,13 +26,5 @@
     <ProjectReference Include="..\MyApp.ServiceInterface\MyApp.ServiceInterface.csproj" />
     <ProjectReference Include="..\MyApp.ServiceModel\MyApp.ServiceModel.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\lib\js\bootstrap.mjs" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\js\popper.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\js\servicestack-client.mjs" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\js\servicestack-vue.mjs" />
-    <_ContentIncludedByDefault Remove="wwwroot\lib\js\vue.mjs" />
-  </ItemGroup>
-
+  
 </Project>

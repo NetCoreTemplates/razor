@@ -26,8 +26,25 @@ const files = {
 
 const path = require('path')
 const fs = require('fs')
-const dns = require('dns')
-dns.setDefaultResultOrder('ipv4first')
+const http = require('http')
+const https = require('https')
+// const dns = require('dns')
+// dns.setDefaultResultOrder('ipv4first')
+
+function download(url, file) {
+    const client = url.startsWith('https') ? https : http
+    console.log('download', url)
+    client.get(url, res => {
+        if (res.statusCode === 301 || res.statusCode === 302) {
+            let redirectTo = res.headers.location;
+            if (redirectTo.startsWith('/'))
+                redirectTo = new URL(res.headers.location, new URL(url).origin).href
+            return download(redirectTo, file)
+        }
+        res.pipe(file);
+        file.on('finish', () => file.close())
+    })
+}
 
 Object.keys(files).forEach(dir => {
     const dirFiles = files[dir]
@@ -38,6 +55,9 @@ Object.keys(files).forEach(dir => {
         if (!fs.existsSync(toDir))
             fs.mkdirSync(toDir, { recursive: true })
 
+            const file = fs.createWriteStream(toFile) 
+            download(url, file)
+            /*
             ;(async () => {
             for (let i=0; i<5; i++) {
                 try {
@@ -51,7 +71,8 @@ Object.keys(files).forEach(dir => {
                     console.log(`fetching '${url}' failed: '${e}', retrying..`)
                 }
             }
-        })()
+            })()
+             */
 
     })
 })
