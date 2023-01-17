@@ -28,23 +28,6 @@ const path = require('path')
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
-// const dns = require('dns')
-// dns.setDefaultResultOrder('ipv4first')
-
-function download(url, file) {
-    const client = url.startsWith('https') ? https : http
-    console.log('download', url)
-    client.get(url, res => {
-        if (res.statusCode === 301 || res.statusCode === 302) {
-            let redirectTo = res.headers.location;
-            if (redirectTo.startsWith('/'))
-                redirectTo = new URL(res.headers.location, new URL(url).origin).href
-            return download(redirectTo, file)
-        }
-        res.pipe(file);
-        file.on('finish', () => file.close())
-    })
-}
 
 Object.keys(files).forEach(dir => {
     const dirFiles = files[dir]
@@ -52,27 +35,34 @@ Object.keys(files).forEach(dir => {
         const url = dirFiles[name]
         const toFile = path.join(writeTo, dir, name)
         const toDir = path.dirname(toFile)
-        if (!fs.existsSync(toDir))
+        if (!fs.existsSync(toDir)) {
             fs.mkdirSync(toDir, { recursive: true })
-
-            const file = fs.createWriteStream(toFile) 
-            download(url, file)
-            /*
-            ;(async () => {
-            for (let i=0; i<5; i++) {
-                try {
-                    let r = await fetch(url)
-                    if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
-                    let txt = await r.text()
-                    console.log(`writing ${url} to ${toFile} ...`)
-                    fs.writeFileSync(toFile, txt)
-                    return
-                } catch (e) {
-                    console.log(`fetching '${url}' failed: '${e}', retrying..`)
-                }
-            }
-            })()
-             */
-
+        }
+        download(url, toFile)
     })
 })
+
+function download(url, toFile, retries=5) {
+    const client = url.startsWith('https') ? https : http
+    const retry = (e) => {
+        console.log(`get ${url} failed: ${e}${retries > 0 ? `, ${retries-1} retries remaining...` : ''}`)
+        if (retries > 0) download(url, toFile, retries-1)
+    }
+
+    client.get(url, res => {
+        if (res.statusCode === 301 || res.statusCode === 302) {
+            let redirectTo = res.headers.location;
+            if (redirectTo.startsWith('/'))
+                redirectTo = new URL(res.headers.location, new URL(url).origin).href
+            return download(redirectTo, toFile)
+        } else if (res.statusCode >= 400) {
+            retry(`${res.statusCode} ${res.statusText || ''}`.trimEnd())
+        }
+        else {
+            console.log(`writing ${url} to ${toFile}`)
+            const file = fs.createWriteStream(toFile)
+            res.pipe(file);
+            file.on('finish', () => file.close())
+        }
+    }).on('error', retry)
+}
