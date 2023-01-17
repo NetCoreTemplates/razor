@@ -45,15 +45,15 @@ public class CreateContactResponse
 
 //[Route("/contacts/{Id}", "POST PUT")]
 [Tag("contacts"), ValidateIsAuthenticated]
-public class UpdateContact : IPatch, IReturn<UpdateContactResponse>
+public class UpdateContact : IPut, IReturn<UpdateContactResponse>
 {
     public int Id { get; set; }
-    public Title Title { get; set; }
+    public Title? Title { get; set; }
     public string? Name { get; set; }
     [Input(Type="select", EvalAllowableEntries = "AppData.Colors")] // Used in API Explorer
     public string? Color { get; set; }
     public FilmGenre? FavoriteGenre { get; set; }
-    public int Age { get; set; }
+    public int? Age { get; set; }
 }
 public class UpdateContactResponse 
 {

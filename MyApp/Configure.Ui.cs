@@ -33,9 +33,7 @@ public class AppData
     };
     public List<string> FilmGenres { get; } = EnumUtils.GetValues<FilmGenre>().Map(x => x.ToDescription());
 
-    public List<KeyValuePair<string, string>> Titles { get; } = EnumUtils.GetValues<Title>()
-        .Where(x => x != Title.Unspecified)
-        .ToKeyValuePairs();
+    public List<KeyValuePair<string, string>> Titles { get; } = EnumUtils.GetValues<Title>().ToKeyValuePairs();
 }
 
 public static class AppDataExtensions

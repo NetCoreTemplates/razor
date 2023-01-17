@@ -15,7 +15,6 @@ public class Contact
 
 public enum Title
 {
-    Unspecified=0,
     [Description("Mr.")] Mr,
     [Description("Mrs.")] Mrs,
     [Description("Miss.")] Miss

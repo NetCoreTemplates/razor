@@ -19,7 +19,7 @@ public class UpdateContactValidator : AbstractValidator<UpdateContact>
     public UpdateContactValidator()
     {
         RuleFor(r => r.Id).GreaterThan(0);
-        RuleFor(r => r.Title).NotEqual(Title.Unspecified).WithMessage("Please choose a title");
+        RuleFor(r => r.Title).NotNull().WithMessage("Please choose a title");
         RuleFor(r => r.Name).NotEmpty();
         RuleFor(r => r.Color).Must(x => x.IsValidColor()).WithMessage("Must be a valid color");
         RuleFor(r => r.FavoriteGenre).NotEmpty().WithMessage("Please select your favorite genre");
