@@ -1,6 +1,6 @@
 # razor-tailwind
 
-.NET 6.0 Razor Pages Website
+.NET 6.0 Razor Pages Tailwind Website
 
 [![](https://raw.githubusercontent.com/ServiceStack/Assets/master/csharp-templates/razor-tailwind.png)](http://razor-tailwind.web-templates.io/)
 
