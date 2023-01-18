@@ -63,7 +63,7 @@ public class BlogPosts
         return latestPosts.OrderByDescending(x => x.Date).ToList();
     }
 
-    public string GetPostLink(MarkdownFileInfo post, bool isStatic) => $"/Blog/{post.Slug}";
+    public string GetPostLink(MarkdownFileInfo post) => $"/Blog/{post.Slug}";
 
     public string GetPostsLink() => "/Blog";
     public string GetAuthorLink(string author) => GetPostsLink().AddQueryParam("author", author);
