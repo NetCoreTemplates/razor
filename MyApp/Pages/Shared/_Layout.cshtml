@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"] - MyApp</title>
+    <title>@ViewData["Title"] - My App</title>
     <link rel="stylesheet" href="/css/app.css">
 
-    @Html.ImportMap(new() {
-        ["vue"]                  = new("/lib/mjs/vue.mjs",                 "/lib/mjs/vue.mjs"),
-        ["@servicestack/client"] = new("/lib/mjs/servicestack-client.mjs", "/lib/mjs/servicestack-client.mjs"),
-        ["@servicestack/vue"]    = new("/lib/mjs/servicestack-vue.mjs",    "/lib/mjs/servicestack-vue.mjs")
+    @Html.StaticImportMap(new() {
+        ["vue"]                  = "/lib/mjs/vue.mjs",
+        ["@servicestack/client"] = "/lib/mjs/servicestack-client.mjs",
+        ["@servicestack/vue"]    = "/lib/mjs/servicestack-vue.mjs",
     })
     <script type="module" async>
         import { init } from "/mjs/app.mjs"

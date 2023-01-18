@@ -7,7 +7,7 @@
 <script>window.Server=@Gateway.Send(new MetadataApp()).ToJson().AsRaw()</script>
 
 <div class="mt-8 mx-auto max-w-fit">
-    <h1 class="@CssUtils.ClassNames(Css.H1, "my-8")">@ViewData["Title"]</h1>
+    <h1 class="@Html.ClassNames(Css.H1, "my-8")">@ViewData["Title"]</h1>
     <div id="contacts"></div>
     <div class="mt-16 flex justify-center">
         @Html.SrcPage("Contacts.mjs")

@@ -57,8 +57,8 @@ import { Register } from "/mjs/dtos.mjs"
 import { AppData } from "/mjs/app.mjs"
 
 const SignUp = {
-    template:$1('#signup-template'),
-    props: ['returnUrl'],
+    template: $1('#signup-template'),
+    props: { returnUrl:String },
     setup(props) {
         const { api, setError } = useClient()
         const displayName = ref("")
@@ -67,26 +67,26 @@ const SignUp = {
         const confirmPassword = ref("")
         const autoLogin = ref(true)
 
-        const setUser = (email) => {
+        function setUser(email) {
             let first = leftPart(email, '@@')
             let last = rightPart(leftPart(email, '.'), '@@')
             displayName.value = toPascalCase(first) + ' ' + toPascalCase(last)
             userName.value = email
             confirmPassword.value = password.value = 'p@55wOrd'
         }
-        const onSubmit = async (e) => {
+        async function onSubmit() {
             if (password.value !== confirmPassword.value) {
-                setError({fieldName: 'confirmPassword', message: 'Passwords do not match'})
+                setError({ fieldName:'confirmPassword', message:'Passwords do not match' })
                 return
             }
-            const r = await api(new Register({
+            const registerApi = await api(new Register({
                 displayName,
                 email: userName,
                 password,
                 confirmPassword,
                 autoLogin,
             }))
-            if (r.succeeded) {
+            if (registerApi.succeeded) {
                 location.href = '/signin'
             }
         }

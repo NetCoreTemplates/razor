@@ -5,16 +5,20 @@ if (window.Server == null) {
 /** @param {boolean} [force] */
 export async function load(force) {
     if (window.Server != null && !force) return
-    let r = await fetch('/types/metadata.json')
+    let r = await fetch('/metadata/app.json')
     if (r.ok) {
         let json = await r.text()
         window.Server = JSON.parse(json)
     } else {
-        console.error(`error loading ${r.statusText}`)
+        console.error(`error loading /metadata/app.json: ${r.statusText}`)
     }
 }
 
-/** @param {string} name */
+/** @return {AppMetadata} */
+export function getAppMetadata() { return window.Server } 
+
+/** @param {string} name 
+ *  @return {MetadataType} */
 export function getType(name) {
     let api = window.Server?.api
     if (!api) return api    
@@ -28,14 +32,16 @@ export function getType(name) {
 }
 
 /** @param {string} typeName
-  * @param {string} name */
+  * @param {string} name 
+  * @return {MetadataPropertyType} */
 export function getProperty(typeName, name) {
     let type = getType(typeName)
     let prop = type && type.properties && type.properties.find(x => x.name.toLowerCase() === name.toLowerCase())
     return prop
 }
 
-/** @param {string} name */
+/** @param {string} name 
+ *  @return {Object.<string,string>} */
 export function enumOptions(name) {
     /** @type {Object} */
     let to = {}
@@ -50,7 +56,8 @@ export function enumOptions(name) {
     return to
 }
 
-/** @param {MetadataPropertyType} prop */
+/** @param {MetadataPropertyType} prop
+ *  @return {Object.<string,string>} */
 export function propertyOptions(prop) {
     let to = {}
     if (!prop) return to

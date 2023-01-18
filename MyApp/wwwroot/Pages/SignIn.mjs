@@ -58,10 +58,10 @@ export default {
             userName.value = email
             password.value = "p@55wOrd"
         }
-        async function submit(e) {
-            const r = await api(new Authenticate(unRefs({ provider: 'credentials', userName, password, rememberMe })))
-            if (r.succeeded) {
-                AppData.Auth = r.response
+        async function submit() {
+            const authApi = await api(new Authenticate(unRefs({ provider: 'credentials', userName, password, rememberMe })))
+            if (authApi.succeeded) {
+                AppData.Auth = authApi.response
                 location.href = props.redirect || '/'
             }
         }

@@ -5,7 +5,7 @@ import { enumOptions, getProperty, propertyOptions } from "../mjs/types.mjs"
 import { unRefs } from "@servicestack/vue"
 
 const Create = {
-    template:`<SlideOver @done="close" title="New Contact">
+    template:/*html*/`<SlideOver @done="close" title="New Contact">
     <form @submit.prevent="submit">
       <input type="submit" class="hidden">
       <fieldset>
@@ -52,8 +52,7 @@ const Create = {
         
         const colorOptions = propertyOptions(getProperty('CreateContact','Color'))
         
-        /** @param {Event} e */
-        const submit = async (e) => {
+        async function submit() {
             const api = await client.api(new CreateContact(unRefs({ title, name, color, favoriteGenre, age, agree })))
             if (api.succeeded) close()
         }
@@ -63,7 +62,7 @@ const Create = {
 }
 
 const Edit = {
-    template:`<SlideOver @done="close" title="Edit Contact">
+    template:/*html*/`<SlideOver @done="close" title="Edit Contact">
     <form @submit.prevent="submit">
       <input type="submit" class="hidden">
       <fieldset>
@@ -104,11 +103,11 @@ const Edit = {
         const colorOptions = propertyOptions(getProperty('CreateContact','Color'))
 
         /** @param {Event} e */
-        const submit = async (e) => {
+        async function submit(e) {
             const api = await client.api(request.value)
             if (api.succeeded) close()
         }
-        const onDelete = async () => {
+        async function onDelete() {
             const api = await client.apiVoid(new DeleteContact({id: props.id}))
             if (api.succeeded) close()
         }

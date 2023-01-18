@@ -17,7 +17,7 @@ const files = {
         '@vue/shared.d.ts':                  'https://unpkg.com/@vue/shared@3/dist/shared.d.ts',
         '@servicestack/client/index.d.ts':   'https://unpkg.com/@servicestack/client/dist/index.d.ts',
         '@servicestack/vue/index.d.ts':      'https://unpkg.com/@servicestack/vue@3/dist/index.d.ts',
-        '@servicestack/vue/api.d.ts':      'https://unpkg.com/@servicestack/vue@3/dist/api.d.ts',
+        '@servicestack/vue/api.d.ts':        'https://unpkg.com/@servicestack/vue@3/dist/api.d.ts',
         '@servicestack/vue/types.d.ts':      'https://unpkg.com/@servicestack/vue@3/dist/types.d.ts',
         '@servicestack/vue/components.d.ts': 'https://unpkg.com/@servicestack/vue@3/dist/components/index.d.ts',
         '@servicestack/ui/index.d.ts':       'https://unpkg.com/@servicestack/ui/shared.d.ts',

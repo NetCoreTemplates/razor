@@ -12,7 +12,7 @@
                 <a href="https://vuejs.org" class="@Css.LinkUnderline">Vue.js</a> &amp; Markdown
             </h4>
             <div class="flex justify-between items-center">
-                <div id="hello-api" class="mr-4"></div>
+                <div id="hello-api" data-component="HelloApi" data-props="{ value: 'Tailwind' }" class="mt-2"></div>
                 @Html.SrcComponent("HelloApi.mjs", size:"w-8 h-8 mt-2")
             </div>
         </div>
@@ -37,10 +37,8 @@
 import { $1, on } from "@@servicestack/client"
 import { client, mount } from "/mjs/app.mjs"
 import { Hello } from "/mjs/dtos.mjs"
-import HelloApi from "/mjs/components/HelloApi.mjs" 
 import GettingStarted from "/mjs/components/GettingStarted.mjs" 
 
-mount('#hello-api', HelloApi, { value: 'Tailwind' })
 mount('#getting-started', GettingStarted, { template:'razor-tailwind' })
 
 on("#txtName", {

@@ -2,8 +2,9 @@
     "scripts": {
         "postinstall": "node postinstall.js",
         "dtos": "cd wwwroot && x mjs",
-        "build": "npm run ui:build",
+        "dev": "dotnet watch",
         "ui:dev": "npx tailwindcss -i ./tailwind.input.css -o ./wwwroot/css/app.css --watch",
-        "ui:build": "npx tailwindcss -i ./tailwind.input.css -o ./wwwroot/css/app.css --minify"
+        "ui:build": "npx tailwindcss -i ./tailwind.input.css -o ./wwwroot/css/app.css --minify",
+        "build": "npm run ui:build"
     }
 }

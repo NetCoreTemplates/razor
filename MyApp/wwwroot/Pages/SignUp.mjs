@@ -45,16 +45,16 @@ export default {
         const confirmPassword = ref("")
         const autoLogin = ref(true)
 
-        /** @param email {string} */
-        const setUser = (email) => {
+        /** @param {string} email */
+        function setUser(email) {
             let first = leftPart(email, '@')
             let last = rightPart(leftPart(email, '.'), '@')
             displayName.value = toPascalCase(first) + ' ' + toPascalCase(last)
             userName.value = email
             confirmPassword.value = password.value = 'p@55wOrd'
         }
-        /** @param e {Event} */
-        const onSubmit = async (e) => {
+        /** @param {Event} e */
+        async function onSubmit() {
             if (password.value !== confirmPassword.value) {
                 setError({fieldName: 'confirmPassword', message: 'Passwords do not match'})
                 return
