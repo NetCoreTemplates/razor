@@ -7,17 +7,25 @@
     <title>@ViewData["Title"] - My App</title>
     <link rel="stylesheet" href="/css/app.css">
 
+    <script>
+    const colorScheme = localStorage.getItem('color-scheme')
+    if (colorScheme === 'dark')
+        document.querySelector('html').classList.add('dark')
+    else
+        document.querySelector('html').classList.remove('dark')
+    </script>
+
+    @if (Context.Request.Headers.UserAgent.Any(x => x.Contains("Safari")))
+    {
+        <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    }
     @Html.StaticImportMap(new() {
         ["vue"]                  = "/lib/mjs/vue.mjs",
         ["@servicestack/client"] = "/lib/mjs/servicestack-client.mjs",
         ["@servicestack/vue"]    = "/lib/mjs/servicestack-vue.mjs",
     })
-    <script type="module" async>
-        import { init } from "/mjs/app.mjs"
-        init(window)
-    </script>
 </head>
-<body>
+<body class="bg-white dark:bg-black dark:text-white">
 @await Html.PartialAsync("Header")
 
 <div class="min-h-screen">
@@ -27,6 +35,11 @@
 </div>
 
 @await Html.PartialAsync("Footer")
+
+<script type="module" async>
+    import { init } from "/mjs/app.mjs"
+    init(window)
+</script>
 
 @await RenderSectionAsync("Scripts", required: false)
 

@@ -5,6 +5,13 @@ import { Authenticate } from "./dtos.mjs"
 import HelloApi from "./components/HelloApi.mjs"
 import SrcLink from "./components/SrcLink.js"
 
+const colorScheme = localStorage.getItem('color-scheme')
+if (colorScheme === 'dark') {
+    $1('html').classList.add('dark')
+} else {
+    $1('html').classList.remove('dark')
+}
+
 let client = null, AppData = { init:false, loaded:false }, Apps = []
 export { client, AppData, Apps, useClient }
 
@@ -78,8 +85,13 @@ export function init(exports) {
         let componentName = el.getAttribute('data-component')
         let component = componentName && Components[componentName]
         if (!component) {
-            console.error(`Could not create component ${componentName}`)
-            return
+            /** @type any */
+            const resolver = { component(name,c) { if (name === componentName) component = c } }
+            ServiceStackVue.install(resolver)
+            if (!component) {
+                console.error(`Could not create component ${componentName}`)
+                return
+            }
         }
 
         let propsStr = el.getAttribute('data-props')
