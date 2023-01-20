@@ -12,7 +12,17 @@ if (colorScheme === 'dark') {
     $1('html').classList.remove('dark')
 }
 
-let client = null, AppData = { init:false, loaded:false }, Apps = []
+let client = null, Apps = []
+let AppData = {
+    init:false,
+    loaded:false,
+    /**@type AuthenticateResponse */
+    Auth: null,
+    isAuthenticated() { return this.Auth != null },
+    isAdmin() { return this.Auth?.roles?.indexOf('Admin') >= 0 },
+    hasRole(role) { return this.Auth?.roles?.indexOf(role) >= 0 },
+    hasPermission(permission) { return this.Auth?.permissions?.indexOf(permission) >= 0 },
+}
 export { client, AppData, Apps, useClient }
 
 /** Simple inline component examples */

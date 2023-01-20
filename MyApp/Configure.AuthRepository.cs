@@ -40,6 +40,7 @@ namespace MyApp
             .ConfigureAppHost(appHost => {
                 var authRepo = appHost.Resolve<IAuthRepository>();
                 authRepo.InitSchema();
+                //TODO Delete or change default User's Password 
                 CreateUser(authRepo, "admin@email.com", "Admin User", "p@55wOrd", roles:new[]{ RoleNames.Admin });
             }, afterConfigure: appHost => 
                 appHost.AssertPlugin<AuthFeature>().AuthEvents.Add(new AppUserAuthEvents()));
