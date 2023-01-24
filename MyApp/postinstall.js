@@ -5,8 +5,11 @@ const defaultPrefix = 'https://unpkg.com'
 const files = {
     mjs: {
         'vue.mjs':                           '/vue@3/dist/vue.esm-browser.js',
+        'vue.min.mjs':                       '/vue@3/dist/vue.esm-browser.prod.js',
         'servicestack-client.mjs':           '/@servicestack/client/dist/servicestack-client.mjs',
+        'servicestack-client.min.mjs':       '/@servicestack/client/dist/servicestack-client.min.mjs',
         'servicestack-vue.mjs':              '/@servicestack/vue@3/dist/servicestack-vue.mjs',
+        'servicestack-vue.min.mjs':          '/@servicestack/vue@3/dist/servicestack-vue.min.mjs',
     },
     typings: {
         'vue/index.d.ts':                    '/vue@3/dist/vue.d.ts',

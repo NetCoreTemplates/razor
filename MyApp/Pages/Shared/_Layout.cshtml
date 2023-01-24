@@ -21,10 +21,10 @@
     {
         <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"></script>
     }
-    @Html.StaticImportMap(new() {
-        ["vue"]                  = "/lib/mjs/vue.mjs",
-        ["@servicestack/client"] = "/lib/mjs/servicestack-client.mjs",
-        ["@servicestack/vue"]    = "/lib/mjs/servicestack-vue.mjs",
+    @Html.ImportMap(new() {
+        ["vue"]                  = ("/lib/mjs/vue.mjs",                 "/lib/mjs/vue.min.mjs"),
+        ["@servicestack/client"] = ("/lib/mjs/servicestack-client.mjs", "/lib/mjs/servicestack-client.min.mjs"),
+        ["@servicestack/vue"]    = ("/lib/mjs/servicestack-vue.mjs",    "/lib/mjs/servicestack-vue.min.mjs"),
     })
 </head>
 <body class="bg-white dark:bg-black dark:text-white">
