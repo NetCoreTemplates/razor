@@ -26,6 +26,12 @@
         ["@servicestack/client"] = ("/lib/mjs/servicestack-client.mjs", "/lib/mjs/servicestack-client.min.mjs"),
         ["@servicestack/vue"]    = ("/lib/mjs/servicestack-vue.mjs",    "/lib/mjs/servicestack-vue.min.mjs"),
     })
+    
+    <script type="module">
+        import { useAuth } from "@@servicestack/vue"
+        const { signIn } = useAuth()
+        signIn(@((await Html.Gateway().ApiAsync(new Authenticate())).Response.AsRawJson()))
+    </script>
 </head>
 <body class="bg-white dark:bg-black dark:text-white">
 @await Html.PartialAsync("Header")
@@ -38,9 +44,9 @@
 
 @await Html.PartialAsync("Footer")
 
-<script type="module" async>
-    import { init } from "/mjs/app.mjs"
-    init(window)
+<script type="module">
+import { init } from "/mjs/app.mjs"
+init()
 </script>
 
 @await RenderSectionAsync("Scripts", required: false)

@@ -133,12 +133,12 @@ to enable an effortless end-to-end Typed development model for calling your APIs
 <div id="result"></div>
 
 <script type="module">
-import { JsonServiceClient, $1, on } from '@servicestack/client'
+import { JsonApiClient, $1, on } from '@servicestack/client'
 import { Hello } from '/types/mjs'
 
 on('#txtName', {
     async keyup(el) {
-        const client = new JsonServiceClient()
+        const client = JsonApiClient.create()
         const api = await client.api(new Hello({ name:el.target.value }))
         $1('#result').innerHTML = api.response.result
     }
@@ -228,7 +228,7 @@ let {
 Typically you would need to unwrap `ref` values when calling APIs, i.e:
 
 ```js
-let client = new JsonServiceClient()
+let client = JsonApiClient.create()
 let api = await client.api(new Hello({ name:name.value }))
 ```
 
@@ -425,7 +425,7 @@ This allows source code to be able to import from the package name instead of it
 ```js
 import { ref } from "vue"
 import { useClient } from "@servicestack/vue"
-import { JsonServiceClient, $1, on } from "@servicestack/client"
+import { JsonApiClient, $1, on } from "@servicestack/client"
 ```
 
 It's a great solution for specifying using local unminified debug builds during **Development**, and more optimal CDN hosted

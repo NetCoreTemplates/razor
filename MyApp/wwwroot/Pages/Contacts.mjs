@@ -1,8 +1,7 @@
 import { ref, onMounted } from "vue"
 import { GetContacts, CreateContact, UpdateContact, DeleteContact } from "../mjs/dtos.mjs"
-import { useClient } from "../mjs/app.mjs"
 import { enumOptions, getProperty, propertyOptions } from "../mjs/types.mjs"
-import { unRefs } from "@servicestack/vue"
+import { useClient, unRefs } from "@servicestack/vue"
 
 const Create = {
     template:/*html*/`<SlideOver @done="close" title="New Contact">
@@ -108,11 +107,11 @@ const Edit = {
             if (api.succeeded) close()
         }
         async function onDelete() {
-            const api = await client.apiVoid(new DeleteContact({id: props.id}))
+            const api = await client.apiVoid(new DeleteContact({id: props.contact.id}))
             if (api.succeeded) close()
         }
         const close = () => emit('done')
-        return { visibleFields, submit, close, enumOptions, colorOptions, request }
+        return { visibleFields, submit, close, enumOptions, onDelete, colorOptions, request }
     }
 }
 
