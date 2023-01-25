@@ -1,4 +1,4 @@
-// Usage: node postinstall.js
+// Usage: npm install
 
 const writeTo = './wwwroot/lib'
 const defaultPrefix = 'https://unpkg.com'
@@ -71,22 +71,4 @@ function httpDownload(url, toFile, retries) {
             file.on('finish', () => file.close())
         }
     }).on('error', retry)
-}
-
-/** Alternative implementation using fetch (requires node 18+) */
-function fetchDownload(url, toFile, retries) {
-    (async () => {
-        for (let i=retries; i>=0; --i) {
-            try {
-                let r = await fetch(url)
-                if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
-                let txt = await r.text()
-                console.log(`writing ${url} to ${toFile}`)
-                fs.writeFileSync(toFile, txt)
-                return
-            } catch (e) {
-                console.log(`get ${url} failed: ${e}${i > 0 ? `, ${i} retries remaining...` : ''}`)
-            }
-        }
-    })()
 }
