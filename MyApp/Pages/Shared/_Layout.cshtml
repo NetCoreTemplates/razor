@@ -1,6 +1,9 @@
 ﻿@inherits Microsoft.AspNetCore.Mvc.Razor.RazorPage<TModel>
 <!doctype html>
 <html lang="en">
+@{
+    var dev = HostContext.AppHost.IsDevelopmentEnvironment();
+}
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,9 +31,19 @@
     })
     
     <script type="module">
-        import { useAuth } from "@@servicestack/vue"
+        import { useAuth, useAppMetadata } from "@@servicestack/vue"
         const { signIn } = useAuth()
-        signIn(@((await Html.Gateway().ApiAsync(new Authenticate())).Response.AsRawJson()))
+        signIn(@await Html.ApiAsJsonAsync(new Authenticate()))
+        
+        let { clear, load } = useAppMetadata()
+        @if (dev) {
+            <text>load(@await Html.ApiAsJsonAsync(new MetadataApp()));</text>
+        } else {
+            <text>
+            clear({ olderThan: 24 * 60 * 60 * 1000 }) //1 day
+            load()
+            </text>
+        }
     </script>
 </head>
 <body class="bg-white dark:bg-black dark:text-white">

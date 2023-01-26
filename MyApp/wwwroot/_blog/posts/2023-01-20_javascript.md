@@ -15,34 +15,34 @@ JavaScript has progressed significantly in recent times where many of the toolin
 that we used to rely on external tools for is now available in modern browsers alleviating the need for
 complex tooling and npm dependencies that have historically plagued modern web development.
 
-The good news is that the complex npm tooling that was previously considered mandatory in modern JavaScript App
+The good news is that the complex npm tooling that was previously considered mandatory in modern JavaScript App 
 development can be considered optional as we can now utilize modern browser features like  
 [async/await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function),
-[JavaScript Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules),
-[dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import),
+[JavaScript Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), 
+[dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import), 
 [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type/importmap)
-and [modern language features](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide) for a
-sophisticated development workflow without the need for any npm build tools.
+and [modern language features](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide) for a 
+sophisticated development workflow without the need for any npm build tools. 
 
 ### Brining Simplicity Back
 
 This template focuses on simplicity and eschews many aspects that has complicated modern JavaScript development,
 specifically:
 
-- No npm node_modules or build tools
-- No client side routing
-- No heavy client state
+ - No npm node_modules or build tools
+ - No client side routing
+ - No heavy client state
 
-Effectively abandoning the traditional SPA approach in lieu of a simpler [MPA](https://docs.astro.build/en/concepts/mpa-vs-spa/)
+Effectively abandoning the traditional SPA approach in lieu of a simpler [MPA](https://docs.astro.build/en/concepts/mpa-vs-spa/) 
 development model using Razor Pages for Server Rendered content with any interactive UIs progressively enhanced with JavaScript.
 
 #### Freedom to use any JS library
 
 Avoiding the SPA route ends up affording more flexibility on which JS libraries each page can use as without a heavy bundled JS
-blob of all JS used by the entire App, it's free to only load the required JS each page needs to best implement its
-required functionality, which can be any JS library, preferably utilizing ESM builds that can be referenced from a
+blob of all JS used by the entire App, it's free to only load the required JS each page needs to best implement its 
+required functionality, which can be any JS library, preferably utilizing ESM builds that can be referenced from a 
 [JavaScript Module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), taking advantage of the module system
-native to modern browsers able to efficiently download the declarative matrix of dependencies each script needs.
+native to modern browsers able to efficiently download the declarative matrix of dependencies each script needs. 
 
 ### Best libraries for progressive Multi Page Apps
 
@@ -84,9 +84,9 @@ const Counter = {
 
 <div data-component="Counter" class="text-center text-2xl py-2 cursor-pointer select-none"></div>
 
-These components can be mounted using the standard [Vue 3 mount](https://vuejs.org/api/application.html#app-mount) API, but to
+These components can be mounted using the standard [Vue 3 mount](https://vuejs.org/api/application.html#app-mount) API, but to 
 make it easier we've added additional APIs for declaratively mounting components to pages using the `data-component` and `data-props`
-attributes, especially useful for including Vue components in Markdown content like this, e.g:
+attributes, especially useful for including Vue components in Markdown content like this, e.g:  
 
 ```html
 <div data-component="Hello" data-props="{ name: 'Vue 3' }"></div>
@@ -120,12 +120,12 @@ const Plugin = {
 <div data-component="Plugin" class="text-center text-2xl py-2 cursor-pointer select-none"></div>
 
 #### [@serviceStack/vue](https://github.com/ServiceStack/servicestack-vue)
-`@serviceStack/vue` is our growing Vue 3 Tailwind component library with a number of rich Tailwind components useful
-in .NET Web Apps, including Input Components with auto form validation binding which is used by all HTML forms in this template.
+`@serviceStack/vue` is our growing Vue 3 Tailwind component library with a number of rich Tailwind components useful 
+in .NET Web Apps, including Input Components with auto form validation binding which is used by all HTML forms in this template. 
 
 #### [@serviceStack/client](https://github.com/ServiceStack/servicestack-client)
 `@serviceStack/client` is our generic [JS/TypeScript](https://docs.servicestack.net/typescript-add-servicestack-reference) client library
-which enables a terse, typed API which can use your App's typed DTOs from the built-in `/types/mjs` endpoint
+which enables a terse, typed API which can use your App's typed DTOs from the built-in `/types/mjs` endpoint 
 to enable an effortless end-to-end Typed development model for calling your APIs **without any build steps**, e.g:
 
 ```html
@@ -159,7 +159,7 @@ import { Hello } from '/js/dtos.mjs'
 client.api(new Hello({ name }))
 ```
 
-You'll typically use all these libraries in your **API-enabled** components as seen in the
+You'll typically use all these libraries in your **API-enabled** components as seen in the 
 [HelloApi.mjs](https://github.com/NetCoreTemplates/razor-tailwind/blob/main/MyApp/wwwroot/mjs/components/HelloApi.mjs)
 component on the home page which calls the [Hello](/ui/Hello) API on each key press:
 
@@ -200,20 +200,20 @@ We'll also go through and explain other features used in this component:
 
 #### `/*html*/`
 
-Although not needed in [Rider](/rider) (which can automatically infer HTML in strings), the `/*html*/` type hint can be used
+Although not needed in [Rider](/rider) (which can automatically infer HTML in strings), the `/*html*/` type hint can be used 
 to instruct tooling like the [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
-VS Code extension to provide syntax highlighting and an enhanced authoring experience for HTML content in string literals.
+VS Code extension to provide syntax highlighting and an enhanced authoring experience for HTML content in string literals. 
 
 #### useClient
 
-[useClient()](https://github.com/ServiceStack/servicestack-vue/blob/main/src/api.ts) provides managed APIs around the `JsonServiceClient`
+[useClient()](https://github.com/ServiceStack/servicestack-vue/blob/main/src/api.ts) provides managed APIs around the `JsonServiceClient` 
 instance registered in Vue App's with:
 
 ```js
 app.provide('client', client)
 ```
 
-Which maintains contextual information around your API calls like **loading** and **error** states, used by `@servicestack/vue` components to
+Which maintains contextual information around your API calls like **loading** and **error** states, used by `@servicestack/vue` components to 
 enable its auto validation binding. Other functionality in this provider include:
 
 ```js
@@ -242,7 +242,7 @@ let api = await client.api(new Hello({ name }))
 
 #### useClient - unRefs
 
-But as DTOs are typed, passing reference values will report a type annotation warning in IDEs with type-checking enabled,
+But as DTOs are typed, passing reference values will report a type annotation warning in IDEs with type-checking enabled, 
 which can be avoided by explicitly unwrapping DTO ref values with `unRefs`:
 
 ```js
@@ -251,8 +251,8 @@ let api = await client.api(new Hello(unRefs({ name })))
 
 #### useClient - setError
 
-`setError` can be used to populate client-side validation errors which the
-[SignUp.mjs](https://github.com/NetCoreTemplates/razor-tailwind/blob/main/MyApp/wwwroot/Pages/SignUp.mjs)
+`setError` can be used to populate client-side validation errors which the 
+[SignUp.mjs](https://github.com/NetCoreTemplates/vue-mjs/blob/main/MyApp/wwwroot/Pages/SignUp.mjs)
 component uses to report an invalid submissions when passwords don't match:
 
 ```js
@@ -286,7 +286,7 @@ This populated `ResponseStatus` DTO can either be manually passed into each comp
 </template>
 ```
 
-Where if you try adding an empty Todo the `CreateTodo` API will fail and populate its `store.error` reactive property with the
+Where if you try adding an empty Todo the `CreateTodo` API will fail and populate its `store.error` reactive property with the 
 APIs Error Response DTO which the `<TextInput />` component checks for to display any field validation errors matching the
 field in `id` adjacent to the HTML Input:
 
@@ -376,19 +376,19 @@ const Edit = {
 }
 ```
 
-This effectively makes form validation binding a transparent detail where all `@servicestack/vue`
-Input Components are able to automatically apply contextual validation errors next to the fields they apply to:
+This effectively makes form validation binding a transparent detail where all `@servicestack/vue` 
+Input Components are able to automatically apply contextual validation errors next to the fields they apply to: 
 
 ![](https://raw.githubusercontent.com/ServiceStack/docs/master/docs/images/scripts/edit-contact-validation.png)
 
 #### [JSDoc](https://jsdoc.app)
 
-We get great value from using [TypeScript](https://www.typescriptlang.org) to maintain our libraries typed code bases, however it
-does mandate using an external tool to convert it to valid JS before it can be run, something this template expressly avoids.
+We get great value from using [TypeScript](https://www.typescriptlang.org) to maintain our libraries typed code bases, however it 
+does mandate using an external tool to convert it to valid JS before it can be run, something this template expressly avoids. 
 
-Instead this template uses JSDoc to add type annotations to App code where they add value, which  at the cost of slightly more
-verbose syntax enables much of the same static analysis and intelli-sense benefits of TypeScript, but without needing any tools
-to convert it to valid JavaScript:
+Instead this template uses JSDoc to add type annotations to App code where they add value, which  at the cost of slightly more 
+verbose syntax enables much of the same static analysis and intelli-sense benefits of TypeScript, but without needing any tools 
+to convert it to valid JavaScript:   
 
 ```js
 /** @param {KeyboardEvent} e */
@@ -403,7 +403,7 @@ function validateSafeName(e) {
 #### TypeScript Language Service
 
 Whilst the code-base doesn't use TypeScript syntax in its code base directly, it still uses TypeScript's language services to enable
-static analysis for the included libraries from the TypeScript definitions included in `/lib/typings`, downloaded
+static analysis for the included libraries from the TypeScript definitions included in `/lib/typings`, downloaded 
 in [postinstall.js](https://github.com/NetCoreTemplates/razor-tailwind/blob/main/MyApp/postinstall.js) after installing the template.
 
 ### Import Maps
@@ -428,14 +428,14 @@ import { useClient } from "@servicestack/vue"
 import { JsonApiClient, $1, on } from "@servicestack/client"
 ```
 
-It's a great solution for specifying using local unminified debug builds during **Development**, and more optimal CDN hosted
+It's a great solution for specifying using local unminified debug builds during **Development**, and more optimal CDN hosted 
 production builds when running in **Production**, alleviating the need to rely on complex build tools to perform this code transformation for us:
 
 ```csharp
 @Html.ImportMap(new()
 {
     ["vue"]                  = ("/lib/mjs/vue.mjs",                 "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"),
-    ["@servicestack/client"] = ("/lib/mjs/servicestack-client.mjs", "https://unpkg.com/@servicestack/client@1/dist/servicestack-client.min.mjs"),
+    ["@servicestack/client"] = ("/lib/mjs/servicestack-client.mjs", "https://unpkg.com/@servicestack/client@2/dist/servicestack-client.min.mjs"),
     ["@servicestack/vue"]    = ("/lib/mjs/servicestack-vue.mjs",    "https://unpkg.com/@servicestack/vue@3/dist/servicestack-vue.min.mjs")
 })
 ```
@@ -456,20 +456,25 @@ that's configured in this template:
 ### Fast Component Loading
 
 SPAs are notorious for being slow to load due to needing to download large blobs of JavaScript bundles that it needs to initialize
-with their JS framework to mount their App component before it starts fetching the data from the server it needs to render its components.
+with their JS framework to mount their App component before it starts fetching the data from the server it needs to render its components. 
 
-A complex solution to this problem is to server render the initial HTML content then re-render it again on the client after the page loads.
+A complex solution to this problem is to server render the initial HTML content then re-render it again on the client after the page loads. 
 A simpler solution is to just embed the JSON data the component needs in the page that loads it, which is what [/Todos](/TodoMvc) does
-to load its initial list of todos using the [Service Gateway](https://docs.servicestack.net/service-gateway) to invoke your APIs in process
-that can be rendered as unescaped JSON with the `AsRawJson()` extension method:
+to load its initial list of todos using the [Service Gateway](https://docs.servicestack.net/service-gateway) to invoke your APIs in process with:
 
 ```html
-<script>todos = @((await Gateway.SendAsync(new QueryTodos())).Results.AsRawJson())</script>
+<script>todos = @await ApiResultsAsJsonAsync(new QueryTodos())</script>
 <script type="module">
 import TodoMvc from "/Pages/TodoMvc.mjs"
 import { mount } from "/mjs/app.mjs"
 mount('#todomvc', TodoMvc, { todos })
 </script>
+```
+
+Where `ApiResultsAsJsonAsync` is a simplified helper that uses the `Gateway` to call your API and returns its unencoded JSON response:
+
+```csharp
+(await Gateway.ApiAsync(new QueryTodos())).Response?.Results.AsRawJson();
 ```
 
 The result of which should render the List of Todos instantly when the page loads since it doesn't need to perform any additional Ajax requests
@@ -485,7 +490,7 @@ loaded in `_Layout.cshtml` with:
 ```csharp
 let { clear, load } = useAppMetadata()
 @if (dev) {
-    <text>load(@((await Html.Gateway().ApiAsync(new MetadataApp())).Response.AsRawJson()));</text>
+    <text>load(@await Html.ApiAsJsonAsync(new MetadataApp()));</text>
 } else {
     <text>
     clear({ olderThan: 24 * 60 * 60 * 1000 }) //1 day

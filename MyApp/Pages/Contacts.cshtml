@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "Contacts";
 }
-<script>window.Server=@Gateway.Send(new MetadataApp()).ToJson().AsRaw()</script>
 
 <div class="mt-8 mx-auto max-w-fit">
     <h1 class="@Html.ClassNames(Css.H1, "my-8")">@ViewData["Title"]</h1>
@@ -17,9 +16,9 @@
     </h4>
 </div>
 
-<script>contacts = @((await Gateway.SendAsync(new GetContacts())).Results.AsRawJson())</script>
+<script>contactsApi = @await Html.ApiAsJsonAsync(new GetContacts())</script>
 <script type="module">
 import Contacts from "/Pages/Contacts.mjs"
 import { mount } from "/mjs/app.mjs"
-mount("#contacts", Contacts, { contacts })
+mount("#contacts", Contacts, { contacts:contactsApi.results })
 </script>

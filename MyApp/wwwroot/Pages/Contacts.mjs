@@ -1,7 +1,6 @@
 import { ref, onMounted } from "vue"
 import { GetContacts, CreateContact, UpdateContact, DeleteContact } from "../mjs/dtos.mjs"
-import { enumOptions, getProperty, propertyOptions } from "../mjs/types.mjs"
-import { useClient, unRefs } from "@servicestack/vue"
+import { useClient, unRefs, useAppMetadata } from "@servicestack/vue"
 
 const Create = {
     template:/*html*/`<SlideOver @done="close" title="New Contact">
@@ -48,8 +47,9 @@ const Create = {
         const favoriteGenre = ref('')
         const age = ref(0)
         const agree = ref(false)
-        
-        const colorOptions = propertyOptions(getProperty('CreateContact','Color'))
+
+        const { property, propertyOptions, enumOptions } = useAppMetadata()
+        const colorOptions = propertyOptions(property('CreateContact','Color'))
         
         async function submit() {
             const api = await client.api(new CreateContact(unRefs({ title, name, color, favoriteGenre, age, agree })))
@@ -99,7 +99,8 @@ const Edit = {
         const client = useClient()
 
         const request = ref(new UpdateContact(props.contact))
-        const colorOptions = propertyOptions(getProperty('CreateContact','Color'))
+        const { property, propertyOptions, enumOptions } = useAppMetadata()
+        const colorOptions = propertyOptions(property('CreateContact','Color'))
 
         /** @param {Event} e */
         async function submit(e) {
@@ -111,7 +112,7 @@ const Edit = {
             if (api.succeeded) close()
         }
         const close = () => emit('done')
-        return { visibleFields, submit, close, enumOptions, onDelete, colorOptions, request }
+        return { visibleFields, colorOptions, request, submit, close, enumOptions, onDelete }
     }
 }
 
