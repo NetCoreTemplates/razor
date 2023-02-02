@@ -30,8 +30,8 @@
             </div>
             <div class="pt-5 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
                 <div class="flex justify-end">
-                    <form-loading class="flex-1"></form-loading>
-                    <primary-button class="ml-3">Sign Up</primary-button>
+                    <form-loading v-if="loading" class="flex-1"></form-loading>
+                    <primary-button class="ml-3" :disabled="loading">Sign Up</primary-button>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@ const SignUp = {
     template: $1('#signup-template'),
     props: { returnUrl:String },
     setup(props) {
-        const { api, setError } = useClient()
+        const { api, setError, loading } = useClient()
         const displayName = ref("")
         const userName = ref("")
         const password = ref("")
@@ -89,7 +89,7 @@ const SignUp = {
                 location.href = '/signin'
             }
         }
-        return { displayName, userName, password, confirmPassword, autoLogin, setUser, onSubmit }
+        return { loading, displayName, userName, password, confirmPassword, autoLogin, setUser, onSubmit }
     }
 }
 mount('#signup', SignUp)

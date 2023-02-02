@@ -35,9 +35,9 @@
                 </div>
                 <div class="pt-5 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
                     <div class="flex justify-end">
-                        <form-loading class="flex-1"></form-loading>
-                        <secondary-button href="/signup">Register New User</secondary-button>
-                        <primary-button class="ml-3">Login</primary-button>
+                        <form-loading v-if="loading" class="flex-1"></form-loading>
+                        <secondary-button href="/signup" :disabled="loading">Register New User</secondary-button>
+                        <primary-button class="ml-3" :disabled="loading">Login</primary-button>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@ const SignIn = {
     template:document.querySelector('#signin-template'),
     props: { redirect:String },
     setup(props) {
-        const { api, unRefs } = useClient()
+        const { api, unRefs, loading } = useClient()
         const userName = ref('')
         const password = ref('')
         const rememberMe = ref(true)
@@ -88,7 +88,7 @@ const SignIn = {
                 location.href = props.redirect || '/'
             }
         }
-        return { userName, password, rememberMe, setUser, submit }
+        return { userName, password, rememberMe, setUser, submit, loading }
     }
 }
 

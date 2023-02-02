@@ -1,6 +1,6 @@
 import { ref, onMounted } from "vue"
 import { GetContacts, CreateContact, UpdateContact, DeleteContact } from "../mjs/dtos.mjs"
-import { useClient, unRefs, useAppMetadata } from "@servicestack/vue"
+import { useClient, useAppMetadata } from "@servicestack/vue"
 
 const Create = {
     template:/*html*/`<SlideOver @done="close" title="New Contact">
@@ -40,6 +40,7 @@ const Create = {
     setup(props, { emit }) {
         const visibleFields = "title,name,color,filmGenres,age,agree"
         const client = useClient()
+        const { unRefs } = client
 
         const title = ref('')
         const name = ref('')
