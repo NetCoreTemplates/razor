@@ -1,8 +1,10 @@
 import { createApp, reactive, ref } from "vue"
 import { JsonApiClient, $1, $$ } from "@servicestack/client"
-import ServiceStackVue, { RouterLink } from "@servicestack/vue"
+import ServiceStackVue from "@servicestack/vue"
 import HelloApi from "./components/HelloApi.mjs"
-import SrcLink from "./components/SrcLink.js"
+import SrcLink from "./components/SrcLink.mjs"
+import VueComponentGallery from "./components/VueComponentGallery.mjs"
+import VueComponentLibrary from "./components/VueComponentLibrary.mjs"
 
 const colorScheme = localStorage.getItem('color-scheme')
 if (colorScheme === 'dark') {
@@ -45,12 +47,13 @@ const Plugin = {
 
 /** Shared Components */
 const Components = {
-    RouterLink,
     HelloApi,
     SrcLink,
     Hello,
     Counter,
     Plugin,
+    VueComponentGallery,
+    VueComponentLibrary,
 }
 
 const alreadyMounted = el => el.__vue_app__
@@ -70,7 +73,7 @@ export function mount(sel, component, props) {
     Object.keys(Components).forEach(name => {
         app.component(name, Components[name])
     })
-    app.use(ServiceStackVue)
+    app.use(ServiceStackVue, { include: 'RouterLink' })
     app.mount(el)
     Apps.push(app)
     return app
@@ -80,15 +83,11 @@ export function mountAll() {
     $$('[data-component]').forEach(el => {
         if (alreadyMounted(el)) return
         let componentName = el.getAttribute('data-component')
-        let component = componentName && Components[componentName]
+        let component = componentName && Components[componentName] 
+            || ServiceStackVue.component(componentName)
         if (!component) {
-            /** @type any */
-            const resolver = { component(name,c) { if (name === componentName) component = c } }
-            ServiceStackVue.install(resolver)
-            if (!component) {
-                console.error(`Could not create component ${componentName}`)
-                return
-            }
+            console.error(`Could not create component ${componentName}`)
+            return
         }
 
         let propsStr = el.getAttribute('data-props')

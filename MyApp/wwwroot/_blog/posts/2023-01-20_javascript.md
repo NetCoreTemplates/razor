@@ -119,13 +119,15 @@ const Plugin = {
 
 <div data-component="Plugin" class="text-center text-2xl py-2 cursor-pointer select-none"></div>
 
-#### [@serviceStack/vue](https://github.com/ServiceStack/servicestack-vue)
-`@serviceStack/vue` is our growing Vue 3 Tailwind component library with a number of rich Tailwind components useful 
+### @servicestack/vue
+[@servicestack/vue](https://github.com/ServiceStack/servicestack-vue) is our growing Vue 3 Tailwind component library with a number of rich Tailwind components useful 
 in .NET Web Apps, including Input Components with auto form validation binding which is used by all HTML forms in this template. 
 
-#### [@serviceStack/client](https://github.com/ServiceStack/servicestack-client)
-`@serviceStack/client` is our generic [JS/TypeScript](https://docs.servicestack.net/typescript-add-servicestack-reference) client library
-which enables a terse, typed API which can use your App's typed DTOs from the built-in `/types/mjs` endpoint 
+<div data-component="VueComponentGallery"></div>
+
+### @servicestack/client
+[@servicestack/client](https://github.com/ServiceStack/servicestack-client) is our generic JS/TypeScript client library
+which enables a terse, typed API for using your App's typed DTOs from the built-in `/types/mjs` endpoint 
 to enable an effortless end-to-end Typed development model for calling your APIs **without any build steps**, e.g:
 
 ```html
@@ -200,16 +202,17 @@ We'll also go through and explain other features used in this component:
 
 #### `/*html*/`
 
-Although not needed in [Rider](/rider) (which can automatically infer HTML in strings), the `/*html*/` type hint can be used 
+Although not needed in [Rider](rider) (which can automatically infer HTML in strings), the `/*html*/` type hint can be used 
 to instruct tooling like the [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
 VS Code extension to provide syntax highlighting and an enhanced authoring experience for HTML content in string literals. 
 
-#### useClient
+### useClient
 
-[useClient()](https://github.com/ServiceStack/servicestack-vue/blob/main/src/api.ts) provides managed APIs around the `JsonServiceClient` 
+[useClient()](https://docs.servicestack.net/vue/use-client) provides managed APIs around the `JsonServiceClient` 
 instance registered in Vue App's with:
 
 ```js
+let client = JsonApiClient.create()
 app.provide('client', client)
 ```
 
@@ -243,7 +246,7 @@ let api = await client.api(new Hello({ name }))
 #### useClient - unRefs
 
 But as DTOs are typed, passing reference values will report a type annotation warning in IDEs with type-checking enabled, 
-which can be avoided by explicitly unwrapping DTO ref values with `unRefs`:
+which can be resolved by explicitly unwrapping DTO ref values with `unRefs`:
 
 ```js
 let api = await client.api(new Hello(unRefs({ name })))
@@ -376,10 +379,75 @@ const Edit = {
 }
 ```
 
-This effectively makes form validation binding a transparent detail where all `@servicestack/vue` 
+Effectively making form validation binding a transparent detail where all `@servicestack/vue` 
 Input Components are able to automatically apply contextual validation errors next to the fields they apply to: 
 
 ![](https://raw.githubusercontent.com/ServiceStack/docs/master/docs/images/scripts/edit-contact-validation.png)
+
+### AutoForm Components
+
+We can elevate our productivity even further with
+[Auto Form Components](https://docs.servicestack.net/vue/gallery/autoform) that can automatically generate an
+instant API-enabled form with validation binding by specifying the Request DTO to create the form for, e.g:
+
+```html
+<AutoCreateForm type="CreateContact" formStyle="card" />
+```
+
+<div class="not-prose" data-component="AutoCreateForm" data-props="{ type:'CreateContact', formStyle:'card' }"></div>
+
+The AutoForm components are powered by your [App Metadata](https://docs.servicestack.net/vue/use-appmetadata) which allows creating 
+highly customized UIs from [declarative C# attributes](https://docs.servicestack.net/locode/declarative) whose customizations are
+reused across all ServiceStack Auto UIs, including:
+
+ - [API Explorer](https://docs.servicestack.net/api-explorer) 
+ - [Locode](https://docs.servicestack.net/locode/)
+ - [Blazor Tailwind Components](https://docs.servicestack.net/templates-blazor-components)
+
+### useAuth
+
+Your Vue.js code can access Authenticated Users using [useAuth()](https://docs.servicestack.net/vue/use-auth)
+which can also be populated without the overhead of an Ajax request by embedding the response of the built-in
+[Authenticate API](/ui/Authenticate?tab=details) inside `_Layout.cshtml` with:
+
+```html
+<script type="module">
+import { useAuth } from "@@servicestack/vue"
+const { signIn } = useAuth()
+signIn(@await Html.ApiAsJsonAsync(new Authenticate()))
+</script>
+```
+
+Where it enables access to the below [useAuth()](https://docs.servicestack.net/vue/use-auth) utils for inspecting the 
+current authenticated user:  
+
+```js
+const { 
+    signIn,           // Sign In the currently Authenticated User
+    signOut,          // Sign Out currently Authenticated User
+    user,             // Access Authenticated User info in a reactive Ref<AuthenticateResponse>
+    isAuthenticated,  // Check if the current user is Authenticated in a reactive Ref<boolean>
+    hasRole,          // Check if the Authenticated User has a specific role
+    hasPermission,    // Check if the Authenticated User has a specific permission
+    isAdmin           // Check if the Authenticated User has the Admin role
+} = useAuth()
+```
+
+This is used in [BookingsCrud/Index.mjs](https://github.com/NetCoreTemplates/vue-mjs/blob/main/MyApp/wwwroot/Pages/BookingsCrud/Index.mjs)
+to control whether the `<AutoEditForm>` component should enable its delete functionality:
+
+```js
+export default {
+    template/*html*/:`
+    <AutoEditForm type="UpdateBooking" :deleteType="canDelete ? 'DeleteBooking' : null" />
+    `,
+    setup(props) {
+        const { hasRole } = useAuth()
+        const canDelete = computed(() => hasRole('Manager'))
+        return { canDelete }
+    }
+}
+```
 
 #### [JSDoc](https://jsdoc.app)
 
@@ -440,6 +508,19 @@ production builds when running in **Production**, alleviating the need to rely o
 })
 ```
 
+Note: Specifying exact versions of each dependency improves initial load times by eliminating latency from redirects. 
+
+Or if you don't want your Web App to reference any external dependencies, have the ImportMap reference local minified production builds instead:
+
+```csharp
+@Html.ImportMap(new()
+{
+    ["vue"]                  = ("/lib/mjs/vue.mjs",                 "/lib/mjs/vue.min.mjs"),
+    ["@servicestack/client"] = ("/lib/mjs/servicestack-client.mjs", "/lib/mjs/servicestack-client.min.mjs"),
+    ["@servicestack/vue"]    = ("/lib/mjs/servicestack-vue.mjs",    "/lib/mjs/servicestack-vue.min.mjs")
+})
+```
+
 #### Polyfill for Safari
 
 Unfortunately Safari is the last modern browser to [support import maps](https://caniuse.com/import-maps) which is only now in
@@ -480,108 +561,13 @@ Where `ApiResultsAsJsonAsync` is a simplified helper that uses the `Gateway` to 
 The result of which should render the List of Todos instantly when the page loads since it doesn't need to perform any additional Ajax requests
 after the component is loaded.
 
-### App Server Metadata
+### @servicestack/vue Library
 
-The rich server metadata about your APIs that's used to generate your App's DTOs in 
-[Multiple Programming Languages](https://docs.servicestack.net/add-servicestack-reference) or power the built-in 
-[API Explorer UIs](https://docs.servicestack.net/api-explorer) are also available to your App where it's automatically
-loaded in `_Layout.cshtml` with:
+[@servicestack/vue](https://docs.servicestack.net/vue/) is our cornerstone library for enabling a highly productive 
+Vue.js development model across our [Vue Tailwind Project templates](https://docs.servicestack.net/templates-vue) which 
+we'll continue to significantly invest in to unlock even greater productivity benefits in all Vue Tailwind Apps.
 
-```csharp
-let { clear, load } = useAppMetadata()
-@if (dev) {
-    <text>load(@await Html.ApiAsJsonAsync(new MetadataApp()));</text>
-} else {
-    <text>
-    clear(location.hash === '#clear' ? null : { olderThan: 24 * 60 * 60 * 1000 }) //1 day
-    load()
-    </text>
-}
-```
+In addition to a variety of high-productive components, it also contains a core library of functionality 
+underpinning the Vue Components that most Web Apps should also find useful: 
 
-Where during development it always embeds the AppMetadata in each page but as this metadata can become large depending on the size and
-number of your APIs, the above optimization clears and reloads the AppMetadata after **1 day** or if the page was explicitly loaded with `#clear`, 
-otherwise it will use a local copy cached in `localStorage` at `/metadata/app.json`, which Apps needing more 
-fine-grained cache invalidation strategies could inspect and clear.
-
-Which you'll be able to access with the helper functions in `useAppMetadata`:
-
-```js
-const { metadataApi, typeOf, property, enumOptions, propertyOptions } = useAppMetadata()
-```
-
-For example you can use this to print out all the C# property names and their Types for the `Contact` C# DTO with:
-
-```js
-typeOf('Contact').properties.forEach(prop => console.log(`${prop.name}: ${prop.type}`))
-```
-
-More usefully this can be used to avoid code maintenance and duplication efforts from maintaining enum values on both server
-and client forms. 
-
-An example of this is in the [Contacts.mjs](https://github.com/NetCoreTemplates/razor-tailwind/blob/main/MyApp/wwwroot/Pages/Contacts.mjs) 
-component which uses the server metadata to populate the **Title** and **Favorite Genre** select options from the `Title` and `FilmGenre` enums:
-
-```html
-<div class="grid grid-cols-6 gap-6">
-  <div class="col-span-6 sm:col-span-3">
-    <SelectInput id="title" v-model="request.title" :options="enumOptions('Title')" />
-  </div>
-  <div class="col-span-6 sm:col-span-3">
-    <TextInput id="name" v-model="request.name" required placeholder="Contact Name" />
-  </div>
-  <div class="col-span-6 sm:col-span-3">
-    <SelectInput id="color" v-model="request.color" :options="colorOptions" />
-  </div>
-  <div class="col-span-6 sm:col-span-3">
-    <SelectInput id="favoriteGenre" v-model="request.favoriteGenre" :options="enumOptions('FilmGenre')" />
-  </div>
-  <div class="col-span-6 sm:col-span-3">
-    <TextInput type="number" id="age" v-model="request.age" />
-  </div>
-</div>
-```
-
-Whilst the `colorOptions` gets its values from the available options on the `CreateContact.Color` property:    
-
-```js
-const Edit = {
-    //...
-    setup(props) {
-        const { property, propertyOptions, enumOptions } = useAppMetadata()
-        const colorOptions = propertyOptions(property('CreateContact','Color'))
-        return { enumOptions, colorOptions }
-        //..
-    }
-}
-```
-
-Which instead of an enum, references the C# Dictionary in:
-
-```csharp
-public class CreateContact : IPost, IReturn<CreateContactResponse>
-{
-    [Input(Type="select", EvalAllowableEntries = "AppData.Colors")]
-    public string? Color { get; set; }
-    //...
-}
-```
-
-To return a C# Dictionary of custom colors defined in:
-
-```csharp
-public class AppData
-{
-    public static readonly AppData Instance = new();
-    public Dictionary<string, string> Colors { get; } = new() {
-        ["#F0FDF4"] = "Green",
-        ["#EFF6FF"] = "Blue",
-        ["#FEF2F2"] = "Red",
-        ["#ECFEFF"] = "Cyan",
-        ["#FDF4FF"] = "Fuchsia",
-    };
-}
-```
-
-Incidentally this same metadata is also used to populate the auto forms in the built-in 
-[API Explorer](https://docs.servicestack.net/api-explorer).
+<div data-component="VueComponentLibrary" class="mt-4"></div>
