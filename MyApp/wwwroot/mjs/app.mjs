@@ -73,7 +73,8 @@ export function mount(sel, component, props) {
     Object.keys(Components).forEach(name => {
         app.component(name, Components[name])
     })
-    app.use(ServiceStackVue, { include: 'RouterLink' })
+    app.use(ServiceStackVue)
+    app.component('RouterLink', ServiceStackVue.component('RouterLink'))
     app.mount(el)
     Apps.push(app)
     return app

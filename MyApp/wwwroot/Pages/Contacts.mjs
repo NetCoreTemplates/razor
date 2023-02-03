@@ -1,6 +1,6 @@
 import { ref, onMounted } from "vue"
 import { GetContacts, CreateContact, UpdateContact, DeleteContact } from "../mjs/dtos.mjs"
-import { useClient, useAppMetadata } from "@servicestack/vue"
+import { useClient, useMetadata } from "@servicestack/vue"
 
 const Create = {
     template:/*html*/`<SlideOver @done="close" title="New Contact">
@@ -49,7 +49,7 @@ const Create = {
         const age = ref(0)
         const agree = ref(false)
 
-        const { property, propertyOptions, enumOptions } = useAppMetadata()
+        const { property, propertyOptions, enumOptions } = useMetadata()
         const colorOptions = propertyOptions(property('CreateContact','Color'))
         
         async function submit() {
@@ -100,7 +100,7 @@ const Edit = {
         const client = useClient()
 
         const request = ref(new UpdateContact(props.contact))
-        const { property, propertyOptions, enumOptions } = useAppMetadata()
+        const { property, propertyOptions, enumOptions } = useMetadata()
         const colorOptions = propertyOptions(property('CreateContact','Color'))
 
         /** @param {Event} e */
