@@ -83,8 +83,8 @@ export function mountAll() {
     $$('[data-component]').forEach(el => {
         if (alreadyMounted(el)) return
         let componentName = el.getAttribute('data-component')
-        let component = componentName && Components[componentName] 
-            || ServiceStackVue.component(componentName)
+        if (!componentName) return
+        let component = Components[componentName] || ServiceStackVue.component(componentName)
         if (!component) {
             console.error(`Could not create component ${componentName}`)
             return
