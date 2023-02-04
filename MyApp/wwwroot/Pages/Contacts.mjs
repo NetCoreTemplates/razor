@@ -1,13 +1,13 @@
 import { ref, onMounted, watch } from "vue"
-import { GetContacts, CreateContact, UpdateContact, DeleteContact } from "../mjs/dtos.mjs"
 import { useClient, useMetadata } from "@servicestack/vue"
+import { GetContacts, CreateContact, UpdateContact, DeleteContact } from "../mjs/dtos.mjs"
 
 const Create = {
     template:/*html*/`<SlideOver @done="close" title="New Contact">
     <form ref="form" @submit.prevent="submit">
       <input type="submit" class="hidden">
       <fieldset>
-        <ErrorSummary :except="visibleFields" class="mb-4" />
+        <ErrorSummary except="title,name,color,favoriteGenre,age,agree" class="mb-4" />
         <div class="grid grid-cols-6 gap-6">
           <div class="col-span-6 sm:col-span-3">
             <SelectInput id="title" v-model="request.title" :options="enumOptions('Title')" />
@@ -38,21 +38,19 @@ const Create = {
   </SlideOver>`,
     emits:['done'],
     setup(props, { emit }) {
-        const client = useClient()
 
-        const form = ref()
+        const client = useClient()
         const request = ref(new CreateContact())
-        const visibleFields = Object.keys(request.value)
 
         const { property, propertyOptions, enumOptions } = useMetadata()
         const colorOptions = propertyOptions(property('CreateContact','Color'))
         
         async function submit() {
-            const api = await client.apiForm(new CreateContact(), new FormData(form.value))
+            const api = await client.api(request.value)
             if (api.succeeded) close()
         }
         const close = () => emit('done')
-        return { form, visibleFields, submit, close, enumOptions, colorOptions, request }
+        return { submit, close, enumOptions, colorOptions, request }
     }
 }
 
@@ -60,9 +58,8 @@ const Edit = {
     template:/*html*/`<SlideOver @done="close" title="Edit Contact">
     <form ref="form" @submit.prevent="submit">
       <input type="submit" class="hidden">
-      <input type="hidden" name="id" :value="request.id">
       <fieldset>
-        <ErrorSummary :except="visibleFields" class="mb-4" />
+        <ErrorSummary except="title,name,color,favoriteGenre,age" class="mb-4" />
         <div class="grid grid-cols-6 gap-6">
           <div class="col-span-6 sm:col-span-3">
             <SelectInput id="title" v-model="request.title" :options="enumOptions('Title')" />
@@ -94,22 +91,20 @@ const Edit = {
     setup(props, { emit }) {
         const client = useClient()
 
-        const form = ref()
         const request = ref(new UpdateContact(props.contact))
-        const visibleFields = Object.keys(request.value)        
         const { property, propertyOptions, enumOptions } = useMetadata()
-        const colorOptions = propertyOptions(property('CreateContact','Color'))
+        const colorOptions = propertyOptions(property('UpdateContact','Color'))
 
         async function submit() {
-            const api = await client.apiForm(new UpdateContact(), new FormData(form.value))
+            const api = await client.api(request.value)
             if (api.succeeded) close()
         }
         async function onDelete() {
-            const api = await client.apiVoid(new DeleteContact({id: props.contact.id}))
+            const api = await client.apiVoid(new DeleteContact({ id:props.contact.id }))
             if (api.succeeded) close()
         }
         const close = () => emit('done')
-        return { form, visibleFields, colorOptions, request, submit, close, enumOptions, onDelete }
+        return { colorOptions, request, submit, close, enumOptions, onDelete }
     }
 }
 

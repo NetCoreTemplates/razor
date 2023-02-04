@@ -16,16 +16,16 @@
 </div>
 
 <template id="signup-template">
-    <form v-on:submit.prevent="onSubmit">
+    <form v-on:submit.prevent="submit">
         <div class="shadow overflow-hidden sm:rounded-md">
-            <error-summary except="displayName,userName,password,confirmPassword,autoLogin"></error-summary>
+            <error-summary except="displayName,email,password,confirmPassword,autoLogin"></error-summary>
             <div class="px-4 py-5 bg-white dark:bg-black space-y-6 sm:p-6">
                 <div class="flex flex-col gap-y-4">
-                    <text-input id="displayName" help="Your first and last name" v-model="displayName"></text-input>
-                    <text-input id="userName" label="Email" placeholder="Email" help="" v-model="userName"></text-input>
-                    <text-input id="password" type="password" help="6 characters or more" v-model="password"></text-input>
-                    <text-input id="confirmPassword" type="password" v-model="confirmPassword"></text-input>
-                    <checkbox-input id="autoLogin" v-model="autoLogin"></checkbox-input>
+                    <text-input id="displayName" help="Your first and last name" v-model="request.displayName"></text-input>
+                    <text-input id="email" label="Email" placeholder="Email" help="" v-model="request.email"></text-input>
+                    <text-input id="password" type="password" help="6 characters or more" v-model="request.password"></text-input>
+                    <text-input id="confirmPassword" type="password" v-model="request.confirmPassword"></text-input>
+                    <checkbox-input id="autoLogin" v-model="request.autoLogin"></checkbox-input>
                 </div>
             </div>
             <div class="pt-5 px-4 py-3 bg-gray-50 dark:bg-gray-900 text-right sm:px-6">
@@ -47,10 +47,9 @@
         </span>
     </div>
 </template>
-
 <script type="module">
 import { mount } from "/mjs/app.mjs"
-import { ref, watchEffect, nextTick } from "vue"
+import { ref } from "vue"
 import { $1, leftPart, rightPart, toPascalCase } from "@@servicestack/client"
 import { useClient } from "@@servicestack/vue"
 import { Register } from "/mjs/dtos.mjs"
@@ -59,37 +58,33 @@ const SignUp = {
     template: $1('#signup-template'),
     props: { returnUrl:String },
     setup(props) {
-        const { api, setError, loading } = useClient()
-        const displayName = ref("")
-        const userName = ref("")
-        const password = ref("")
-        const confirmPassword = ref("")
-        const autoLogin = ref(true)
+        const client = useClient()
+        const { setError, loading } = client
+        const request = ref(new Register({ autoLogin:true }))
 
         function setUser(email) {
             let first = leftPart(email, '@@')
             let last = rightPart(leftPart(email, '.'), '@@')
-            displayName.value = toPascalCase(first) + ' ' + toPascalCase(last)
-            userName.value = email
-            confirmPassword.value = password.value = 'p@55wOrd'
+            const dto = request.value
+            dto.displayName = toPascalCase(first) + ' ' + toPascalCase(last)
+            dto.email = email
+            dto.confirmPassword = dto.password = 'p@@55wOrd'
         }
-        async function onSubmit() {
-            if (password.value !== confirmPassword.value) {
-                setError({ fieldName:'confirmPassword', message:'Passwords do not match' })
+        
+        async function submit(e) {
+            if (request.value.password !== request.value.confirmPassword) {
+                setError({ fieldName: 'confirmPassword', message: 'Passwords do not match' })
                 return
             }
-            const registerApi = await api(new Register({
-                displayName,
-                email: userName,
-                password,
-                confirmPassword,
-                autoLogin,
-            }))
-            if (registerApi.succeeded) {
-                location.href = '/signin'
+            
+            // Example using client.apiForm()
+            const api = await client.apiForm(new Register(), new FormData(e.target))
+            if (api.succeeded) {
+                location.href = props.returnUrl || '/signin'
             }
         }
-        return { loading, displayName, userName, password, confirmPassword, autoLogin, setUser, onSubmit }
+        
+        return { loading, request, setUser, submit }
     }
 }
 mount('#signup', SignUp)
