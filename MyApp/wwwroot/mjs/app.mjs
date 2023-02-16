@@ -2,7 +2,6 @@ import { createApp, reactive, ref } from "vue"
 import { JsonApiClient, $1, $$ } from "@servicestack/client"
 import ServiceStackVue from "@servicestack/vue"
 import HelloApi from "./components/HelloApi.mjs"
-import SrcLink from "./components/SrcLink.mjs"
 import VueComponentGallery from "./components/VueComponentGallery.mjs"
 import VueComponentLibrary from "./components/VueComponentLibrary.mjs"
 
@@ -48,7 +47,6 @@ const Plugin = {
 /** Shared Components */
 const Components = {
     HelloApi,
-    SrcLink,
     Hello,
     Counter,
     Plugin,
