@@ -2,6 +2,7 @@
 @tailwind components;
 
 /* override element defaults */
+strong { font-weight:600; }
 b { font-weight:600; }
 
 /*vue*/

@@ -7,28 +7,20 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg" href="/img/logo.svg">
     <title>@ViewData["Title"] - My App</title>
-    <script>
-    let colorScheme = localStorage.getItem('color-scheme')
-    setColorScheme()
-    function setColorScheme() {
-        if (colorScheme === 'dark')
-            document.querySelector('html').classList.add('dark')
-        else
-            document.querySelector('html').classList.remove('dark')
-    }
-    </script>
-    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/app.css"/>
+    <link rel="stylesheet" href="/css/typography.css"/>
 
-    @if (Context.Request.Headers.UserAgent.Any(x => x.Contains("Safari") && !x.Contains("Chrome")))
+    @Html.ImportMap(new()
     {
-        <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"></script>
-    }
-    @Html.ImportMap(new() {
         ["vue"]                  = ("/lib/mjs/vue.mjs",                 "/lib/mjs/vue.min.mjs"),
         ["@servicestack/client"] = ("/lib/mjs/servicestack-client.mjs", "/lib/mjs/servicestack-client.min.mjs"),
         ["@servicestack/vue"]    = ("/lib/mjs/servicestack-vue.mjs",    "/lib/mjs/servicestack-vue.min.mjs"),
+        ["app.mjs"]              = ("/mjs/app.mjs",                     "/mjs/app.mjs"),
+        ["dtos.mjs"]             = ("/mjs/dtos.mjs",                    "/mjs/dtos.mjs"),
     })
+    @await RenderSectionAsync("head", required: false)
     
     @if (dev) {
         <script>window.Server = @await Html.ApiAsJsonAsync(new MetadataApp())</script>
@@ -59,6 +51,18 @@
 import { init } from "/mjs/app.mjs"
 init()
 </script>
+
+<environment include="Development">
+    <script src="~/lib/js/jquery.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            asp-fallback-src="~/lib/js/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous">
+    </script>
+</environment>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
 @await RenderSectionAsync("Scripts", required: false)
 

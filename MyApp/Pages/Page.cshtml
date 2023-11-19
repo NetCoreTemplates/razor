@@ -1,0 +1,40 @@
+﻿@page "/{slug}"
+@model Page
+@inject MarkdownPages Markdown
+@inject AppConfig AppConfig
+
+@{
+    var doc = Markdown.GetBySlug(Model.Slug);
+    if (doc == null)
+    {
+        Response.Redirect("/404");
+        return;
+    }
+    if (doc.Layout != null) 
+        Layout = doc.Layout == "none"
+            ? null
+            : doc.Layout;
+    ViewData["Title"] = doc.Title;
+}
+
+@section head {
+    @await Html.PartialAsync("MetaHeaders", new Shared.MetaHeaders(doc) {
+        CanonicalUrl = AppConfig.PublicBaseUrl.CombineWith(doc.Slug),
+    })
+}
+
+<link rel="stylesheet" href="css/typography.css">
+<section class="flex-col md:flex-row flex justify-center mt-16 mb-16 md:mb-12">
+    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 dark:text-gray-50 sm:text-5xl md:text-6xl">
+        @doc.Title
+    </h1>
+</section>    
+<div class="mx-auto">
+    <div class="mx-auto prose lg:prose-xl mb-24">
+        @Html.Raw(doc.Preview)
+    </div>
+</div>
+
+<link rel="stylesheet" href="//unpkg.com/@@highlightjs/cdn-assets/styles/atom-one-dark.min.css">
+<script src="/lib/js/highlight.js"></script>
+<script>hljs.highlightAll()</script>

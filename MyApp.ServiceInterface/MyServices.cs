@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ServiceStack;
-using ServiceStack.Script;
-using ServiceStack.DataAnnotations;
+﻿using ServiceStack;
 using MyApp.ServiceModel;
 
 namespace MyApp.ServiceInterface;
