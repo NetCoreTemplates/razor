@@ -6,7 +6,6 @@
 # Custom
 dist/
 coverage/
-lib/
 package-lock.json
 App_Data/
 
