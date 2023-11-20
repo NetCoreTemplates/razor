@@ -5,35 +5,45 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <PublishProfile>DefaultContainer</PublishProfile>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="MyApp" />
-    <Using Include="ServiceStack" />
-    <Using Include="ServiceStack.Mvc" />
+    <Using Include="MyApp.ServiceModel" />
   </ItemGroup>
 
-  <!-- dotnet watch support -->
-  <Target Name="RazorWatch" BeforeTargets="_CoreCollectWatchItems">
-    <ItemGroup>
-      <RazorWatch Include="**\*.cshtml" />
-      <Watch Include="%(RazorWatch.FullPath)" />
-    </ItemGroup>
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.*" />
+    <PackageReference Include="Markdig" Version="0.33.*" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.30.*" />
     <PackageReference Include="ServiceStack" Version="8.*" />
     <PackageReference Include="ServiceStack.Mvc" Version="8.*" />
     <PackageReference Include="ServiceStack.Server" Version="8.*" />
-      
-    <!-- Required for Razor compilation on change: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=aspnetcore-5.0 -->
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.*" />
+    <PackageReference Include="ServiceStack.Extensions" Version="8.*" />
+    <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="8.*" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MyApp.ServiceInterface\MyApp.ServiceInterface.csproj" />
     <ProjectReference Include="..\MyApp.ServiceModel\MyApp.ServiceModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="_pages\**\*.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="_posts\**\*.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

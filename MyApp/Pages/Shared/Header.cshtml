@@ -26,29 +26,46 @@
                         void RenderLinkButton(string href, string childContent, string? cls = null)
                         {
                             <li class="relative flex flex-wrap just-fu-start m-0">
-                                <a href="@href" class="@(cls ?? Css.SecondaryButton)">
+                                <a href="@href" class="mx-2 @(cls ?? Css.SecondaryButton)">
                                     @Html.Raw(childContent)
                                 </a>
                             </li>
                         }
 
                         RenderNavLink("/Blog", "Blog");
-                        RenderNavLink("/TodoMvc", "Todos");
-                        RenderNavLink("/Contacts", "Contacts"); // Redirects Unauthenticated users
-                        if (isAuthenticated) // Hide from Unauthenticated users
-                            RenderNavLink("/profile", "Profile");
+                        RenderNavLink("/secure/bookings", "Bookings");
                         if (isAdmin)
                             RenderNavLink("/admin", "Admin");
-                        RenderNavLink("/Privacy", "Privacy");
-                        if (isAuthenticated)
-                            RenderLinkButton("/auth/logout?continue=/", "Sign Out");
+                        RenderNavLink("/privacy", "Privacy");
                         if (!isAuthenticated)
-                            RenderLinkButton("/signin", "Sign In");
-                        if (!isAuthenticated)
-                            RenderLinkButton("/signup", "Sign Up", $"ml-2 {Css.PrimaryButton}");
+                        {
+                            RenderLinkButton("/Identity/Account/Login", "Sign In");
+                        }
+                        else
+                        {
+                            <li>
+                                <div class="mx-3 relative">
+                                    <div>
+                                        <a href="/Identity/Account/Manage"
+                                           class="max-w-xs bg-white dark:bg-black rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 lg:p-2 lg:rounded-md lg:hover:bg-gray-50 dark:lg:hover:bg-gray-900 dark:ring-offset-black" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                            <img class="h-8 w-8 rounded-full" src="@User.GetPicture()" alt="">
+                                            <span class="ml-3 text-gray-700 dark:text-gray-300 text-sm font-medium lg:block">
+                                                <span class="sr-only">Open user menu for </span>
+                                                @User.GetDisplayName()
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="relative flex flex-wrap just-fu-start mr-2">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                    <button type="submit" class="mx-2 @Css.SecondaryButton">Sign Out</button>
+                                </form>
+                            </li>
+                        }
                     }
-                    <li class="relative flex flex-wrap just-fu-start m-0">
-                        <div data-component="DarkModeToggle" class="ml-2 w-10"></div>
+                    <li class="relative flex flex-wrap just-fu-start ml-2">
+                        @await Html.PartialAsync("DarkModeToggle")
                     </li>
                 </ul>
             </nav>

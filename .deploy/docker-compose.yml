@@ -14,6 +14,16 @@ services:
         volumes:
             - app-mydb:/app/App_Data  
 
+    app-migration:
+        image: ghcr.io/${IMAGE_REPO}:${RELEASE_VERSION} 
+        restart: "no"                                  
+        container_name: ${APP_NAME}_app_migration       
+        profiles:                                      
+            - migration                                
+        command: --AppTasks=migrate                     
+        volumes:
+            - app-mydb:/app/App_Data  
+
 networks:
   default:
     external: true                                     

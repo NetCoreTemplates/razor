@@ -61,8 +61,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
-        
-      - name: Setup dotnet
+      - name: setup .net core
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0'
@@ -79,7 +78,7 @@ jobs:
           ${{ secrets.APPSETTINGS_PATCH }}
           EOF
           x patch appsettings.json.patch
-      
+          cat appsettings.json
       
       # Build and push new docker image, skip for manual redeploy other than 'latest'
       - name: Build and push Docker image
@@ -135,7 +134,7 @@ jobs:
           source: "./.deploy/docker-compose.yml,./.deploy/.env"
           target: "~/.deploy/${{ github.event.repository.name }}/"
       
-      - name: Setup App_Data volume directory
+      - name: Run remote db migrations
         uses: appleboy/ssh-action@v0.1.5
         env:
           APPTOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -153,6 +152,7 @@ jobs:
             docker compose pull
             export APP_ID=$(docker compose run --entrypoint "id -u" --rm app)
             docker compose run --entrypoint "chown $APP_ID:$APP_ID /app/App_Data" --user root --rm app
+            docker compose up app-migration --exit-code-from app-migration
 
       # Deploy Docker image with your application using `docker compose up` remotely
       - name: remote docker-compose up via ssh
