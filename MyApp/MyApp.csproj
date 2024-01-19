@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.*" />
-    <PackageReference Include="Markdig" Version="0.33.*" />
+    <PackageReference Include="Markdig" Version="0.34.*" />
   </ItemGroup>
 
   <ItemGroup>
