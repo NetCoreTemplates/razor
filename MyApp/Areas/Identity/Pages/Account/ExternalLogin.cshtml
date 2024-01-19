@@ -16,16 +16,16 @@
 
     <div class="mt-3 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 bg-white dark:bg-black sm:p-6">
-            <form asp-action="ExternalLoginConfirmation" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <div asp-validation-summary="All" class="text-danger text-center font-semibold"></div>
+            <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger text-center font-semibold"></div>
                 <div class="flex flex-col gap-y-4">
                     <div>
                         <div>
-                            <label asp-for="Input.Email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                            <label asp-for="Input.Email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"></label>
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <input type="text" class="@Css.InputText" asp-for="Input.Email" spellcheck="false">
                             </div>
-                            <p asp-validation-for="Email" class="text-danger"></p>
+                            <p asp-validation-for="Input.Email" class="text-danger"></p>
                         </div>
                     </div>
                     <div>
