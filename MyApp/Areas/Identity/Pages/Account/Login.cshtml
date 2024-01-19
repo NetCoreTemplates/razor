@@ -142,10 +142,17 @@ else
                     <th>DisplayName</th>
                     <td>@User.GetDisplayName()</td>
                 </tr>
+                @if (User.GetRoles().Length > 0)
+                {
+                    <tr>
+                        <th>Roles</th>
+                        <td>@User.GetRoles().Join(", ")</td>
+                    </tr>
+                }
                 <tr>
                     <th>ProfileUrl</th>
                     <td>
-                        <img src="@User.GetPicture()" /> 
+                        <img class="w-20 h-20" src="@User.GetPicture()" />
                     </td>
                 </tr>
             </tbody>
