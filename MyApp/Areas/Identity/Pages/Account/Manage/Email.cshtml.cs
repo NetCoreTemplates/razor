@@ -20,12 +20,12 @@ namespace MyApp.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSender<ApplicationUser> _emailSender;
 
         public EmailModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender<ApplicationUser> emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -123,11 +123,10 @@ namespace MyApp.Areas.Identity.Pages.Account.Manage
                     "/Account/ConfirmEmailChange",
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, email = Input.NewEmail, code = code },
-                    protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(
+                    protocol: Request.Scheme)!;
+                await _emailSender.SendConfirmationLinkAsync(user,
                     Input.NewEmail,
-                    "Confirm your email",
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    callbackUrl);
 
                 StatusMessage = "Confirmation link to change email sent. Please check your email.";
                 return RedirectToPage();
@@ -159,11 +158,10 @@ namespace MyApp.Areas.Identity.Pages.Account.Manage
                 "/Account/ConfirmEmail",
                 pageHandler: null,
                 values: new { area = "Identity", userId = userId, code = code },
-                protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
+                protocol: Request.Scheme)!;
+            await _emailSender.SendConfirmationLinkAsync(user,
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                callbackUrl);
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToPage();

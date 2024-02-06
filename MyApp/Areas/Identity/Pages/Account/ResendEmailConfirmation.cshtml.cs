@@ -21,9 +21,9 @@ namespace MyApp.Areas.Identity.Pages.Account
     public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSender<ApplicationUser> _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender<ApplicationUser> emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -76,11 +76,10 @@ namespace MyApp.Areas.Identity.Pages.Account
                 "/Account/ConfirmEmail",
                 pageHandler: null,
                 values: new { userId = userId, code = code },
-                protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
+                protocol: Request.Scheme)!;
+            await _emailSender.SendConfirmationLinkAsync(user,
                 Input.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                callbackUrl);
 
             ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
             return Page();

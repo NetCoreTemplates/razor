@@ -4,23 +4,27 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <PublishProfile>DefaultContainer</PublishProfile>
   </PropertyGroup>
+
   <ItemGroup>
     <Using Include="MyApp" />
     <Using Include="MyApp.ServiceModel" />
+    <Using Include="ServiceStack" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.*" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.*" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.*" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.*" />
     <PackageReference Include="Markdig" Version="0.34.*" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.*" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.*" />
+    
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +33,7 @@
     <PackageReference Include="ServiceStack.Server" Version="8.*" />
     <PackageReference Include="ServiceStack.Extensions" Version="8.*" />
     <PackageReference Include="ServiceStack.OrmLite.Sqlite.Data" Version="8.*" />
+    <PackageReference Include="ServiceStack.AspNetCore.OpenApi" Version="8.*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +48,10 @@
     <None Update="_posts\**\*.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\js\" />
   </ItemGroup>
 
 </Project>

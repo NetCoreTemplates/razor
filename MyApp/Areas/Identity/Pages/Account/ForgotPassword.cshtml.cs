@@ -20,9 +20,9 @@ namespace MyApp.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSender<ApplicationUser> _emailSender;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender<ApplicationUser> emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -69,12 +69,11 @@ namespace MyApp.Areas.Identity.Pages.Account
                     "/Account/ResetPassword",
                     pageHandler: null,
                     values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
+                    protocol: Request.Scheme)!;
 
-                await _emailSender.SendEmailAsync(
+                await _emailSender.SendPasswordResetCodeAsync(user,
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    callbackUrl);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
