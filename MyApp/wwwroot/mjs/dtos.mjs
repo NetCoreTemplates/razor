@@ -1,6 +1,6 @@
 /* Options:
-Date: 2023-11-19 16:26:49
-Version: 8.0
+Date: 2024-02-06 18:04:50
+Version: 8.10
 Tip: To override a DTO option, remove "//" prefix before updating
 BaseUrl: https://localhost:5001
 
@@ -33,8 +33,22 @@ export class QueryBase {
 }
 /** @typedef T {any} */
 export class QueryDb extends QueryBase {
-    /** @param {{skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; }}} [init] */
+    /** @param {{skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; },skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; }}} [init] */
     constructor(init) { super(init); Object.assign(this, init) }
+    /** @type {?number} */
+    skip;
+    /** @type {?number} */
+    take;
+    /** @type {string} */
+    orderBy;
+    /** @type {string} */
+    orderByDesc;
+    /** @type {string} */
+    include;
+    /** @type {string} */
+    fields;
+    /** @type {{ [index: string]: string; }} */
+    meta;
 }
 export class AuditBase {
     /** @param {{createdDate?:string,createdBy?:string,modifiedDate?:string,modifiedBy?:string,deletedDate?:string,deletedBy?:string}} [init] */
@@ -74,7 +88,7 @@ export class Coupon {
     expiryDate;
 }
 export class Booking extends AuditBase {
-    /** @param {{id?:number,name?:string,roomType?:RoomType,roomNumber?:number,bookingStartDate?:string,bookingEndDate?:string,cost?:number,couponId?:string,discount?:Coupon,notes?:string,cancelled?:boolean,createdDate?:string,createdBy?:string,modifiedDate?:string,modifiedBy?:string,deletedDate?:string,deletedBy?:string}} [init] */
+    /** @param {{id?:number,name?:string,roomType?:RoomType,roomNumber?:number,bookingStartDate?:string,bookingEndDate?:string,cost?:number,couponId?:string,discount?:Coupon,notes?:string,cancelled?:boolean,createdDate?:string,createdBy?:string,modifiedDate?:string,modifiedBy?:string,deletedDate?:string,deletedBy?:string,createdDate?:string,createdBy?:string,modifiedDate?:string,modifiedBy?:string,deletedDate?:string,deletedBy?:string}} [init] */
     constructor(init) { super(init); Object.assign(this, init) }
     /** @type {number} */
     id;
@@ -98,6 +112,18 @@ export class Booking extends AuditBase {
     notes;
     /** @type {?boolean} */
     cancelled;
+    /** @type {string} */
+    createdDate;
+    /** @type {string} */
+    createdBy;
+    /** @type {string} */
+    modifiedDate;
+    /** @type {string} */
+    modifiedBy;
+    /** @type {?string} */
+    deletedDate;
+    /** @type {string} */
+    deletedBy;
 }
 export class ResponseError {
     /** @param {{errorCode?:string,fieldName?:string,message?:string,meta?:{ [index: string]: string; }}} [init] */
@@ -131,34 +157,6 @@ export class HelloResponse {
     /** @type {string} */
     result;
 }
-export class AuthenticateResponse {
-    /** @param {{userId?:string,sessionId?:string,userName?:string,displayName?:string,referrerUrl?:string,bearerToken?:string,refreshToken?:string,profileUrl?:string,roles?:string[],permissions?:string[],responseStatus?:ResponseStatus,meta?:{ [index: string]: string; }}} [init] */
-    constructor(init) { Object.assign(this, init) }
-    /** @type {string} */
-    userId;
-    /** @type {string} */
-    sessionId;
-    /** @type {string} */
-    userName;
-    /** @type {string} */
-    displayName;
-    /** @type {string} */
-    referrerUrl;
-    /** @type {string} */
-    bearerToken;
-    /** @type {string} */
-    refreshToken;
-    /** @type {string} */
-    profileUrl;
-    /** @type {string[]} */
-    roles;
-    /** @type {string[]} */
-    permissions;
-    /** @type {ResponseStatus} */
-    responseStatus;
-    /** @type {{ [index: string]: string; }} */
-    meta;
-}
 /** @typedef T {any} */
 export class QueryResponse {
     /** @param {{offset?:number,total?:number,results?:T[],meta?:{ [index: string]: string; },responseStatus?:ResponseStatus}} [init] */
@@ -182,76 +180,87 @@ export class IdResponse {
     /** @type {ResponseStatus} */
     responseStatus;
 }
-export class Hello {
-    /** @param {{name?:string}} [init] */
+export class AuthenticateResponse {
+    /** @param {{userId?:string,sessionId?:string,userName?:string,displayName?:string,referrerUrl?:string,bearerToken?:string,refreshToken?:string,refreshTokenExpiry?:string,profileUrl?:string,roles?:string[],permissions?:string[],responseStatus?:ResponseStatus,meta?:{ [index: string]: string; }}} [init] */
     constructor(init) { Object.assign(this, init) }
-    /** @type {?string} */
-    name;
-    getTypeName() { return 'Hello' }
-    getMethod() { return 'POST' }
-    createResponse() { return new HelloResponse() }
-}
-export class Authenticate {
-    /** @param {{provider?:string,state?:string,oauth_token?:string,oauth_verifier?:string,userName?:string,password?:string,rememberMe?:boolean,errorView?:string,nonce?:string,uri?:string,response?:string,qop?:string,nc?:string,cnonce?:string,accessToken?:string,accessTokenSecret?:string,scope?:string,returnUrl?:string,meta?:{ [index: string]: string; }}} [init] */
-    constructor(init) { Object.assign(this, init) }
-    /**
-     * @type {string}
-     * @description AuthProvider, e.g. credentials */
-    provider;
     /** @type {string} */
-    state;
+    userId;
     /** @type {string} */
-    oauth_token;
-    /** @type {string} */
-    oauth_verifier;
+    sessionId;
     /** @type {string} */
     userName;
     /** @type {string} */
-    password;
-    /** @type {?boolean} */
-    rememberMe;
+    displayName;
     /** @type {string} */
-    errorView;
+    referrerUrl;
     /** @type {string} */
-    nonce;
+    bearerToken;
     /** @type {string} */
-    uri;
+    refreshToken;
+    /** @type {?string} */
+    refreshTokenExpiry;
     /** @type {string} */
-    response;
-    /** @type {string} */
-    qop;
-    /** @type {string} */
-    nc;
-    /** @type {string} */
-    cnonce;
-    /** @type {string} */
-    accessToken;
-    /** @type {string} */
-    accessTokenSecret;
-    /** @type {string} */
-    scope;
-    /** @type {string} */
-    returnUrl;
+    profileUrl;
+    /** @type {string[]} */
+    roles;
+    /** @type {string[]} */
+    permissions;
+    /** @type {ResponseStatus} */
+    responseStatus;
     /** @type {{ [index: string]: string; }} */
     meta;
-    getTypeName() { return 'Authenticate' }
-    getMethod() { return 'POST' }
-    createResponse() { return new AuthenticateResponse() }
+}
+export class Hello {
+    /** @param {{name?:string}} [init] */
+    constructor(init) { Object.assign(this, init) }
+    /** @type {string} */
+    name;
+    getTypeName() { return 'Hello' }
+    getMethod() { return 'GET' }
+    createResponse() { return new HelloResponse() }
 }
 export class QueryBookings extends QueryDb {
-    /** @param {{id?:number,skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; }}} [init] */
+    /** @param {{id?:number,skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; },skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; },skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; }}} [init] */
     constructor(init) { super(init); Object.assign(this, init) }
     /** @type {?number} */
     id;
+    /** @type {?number} */
+    skip;
+    /** @type {?number} */
+    take;
+    /** @type {string} */
+    orderBy;
+    /** @type {string} */
+    orderByDesc;
+    /** @type {string} */
+    include;
+    /** @type {string} */
+    fields;
+    /** @type {{ [index: string]: string; }} */
+    meta;
     getTypeName() { return 'QueryBookings' }
     getMethod() { return 'GET' }
     createResponse() { return new QueryResponse() }
 }
 export class QueryCoupons extends QueryDb {
-    /** @param {{id?:string,skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; }}} [init] */
+    /** @param {{id?:string,skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; },skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; },skip?:number,take?:number,orderBy?:string,orderByDesc?:string,include?:string,fields?:string,meta?:{ [index: string]: string; }}} [init] */
     constructor(init) { super(init); Object.assign(this, init) }
     /** @type {?string} */
     id;
+    /** @type {?number} */
+    skip;
+    /** @type {?number} */
+    take;
+    /** @type {string} */
+    orderBy;
+    /** @type {string} */
+    orderByDesc;
+    /** @type {string} */
+    include;
+    /** @type {string} */
+    fields;
+    /** @type {{ [index: string]: string; }} */
+    meta;
     getTypeName() { return 'QueryCoupons' }
     getMethod() { return 'GET' }
     createResponse() { return new QueryResponse() }
@@ -353,5 +362,32 @@ export class DeleteCoupon {
     getTypeName() { return 'DeleteCoupon' }
     getMethod() { return 'DELETE' }
     createResponse() { }
+}
+export class Authenticate {
+    /** @param {{provider?:string,userName?:string,password?:string,rememberMe?:boolean,accessToken?:string,accessTokenSecret?:string,returnUrl?:string,errorView?:string,meta?:{ [index: string]: string; }}} [init] */
+    constructor(init) { Object.assign(this, init) }
+    /**
+     * @type {string}
+     * @description AuthProvider, e.g. credentials */
+    provider;
+    /** @type {string} */
+    userName;
+    /** @type {string} */
+    password;
+    /** @type {?boolean} */
+    rememberMe;
+    /** @type {string} */
+    accessToken;
+    /** @type {string} */
+    accessTokenSecret;
+    /** @type {string} */
+    returnUrl;
+    /** @type {string} */
+    errorView;
+    /** @type {{ [index: string]: string; }} */
+    meta;
+    getTypeName() { return 'Authenticate' }
+    getMethod() { return 'POST' }
+    createResponse() { return new AuthenticateResponse() }
 }
 
