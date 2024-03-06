@@ -1,7 +1,16 @@
-@page "/posts/{slug}"
+@page "/posts/{Slug:regex(^[-\w]+$)}"
 @model PostModel
 @inject MarkdownBlog Blog
 @inject AppConfig AppConfig
+
+@implements IRenderStatic<PostModel>
+@functions {
+    public List<PostModel> GetStaticProps(RenderContext ctx)
+    {
+        var blog = ctx.Resolve<MarkdownBlog>();
+        return blog.VisiblePosts.Map(doc => new PostModel { Slug = doc.Slug });
+    }
+}
 
 @{
     var doc = Blog.FindPostBySlug(Model.Slug!);
@@ -25,9 +34,9 @@
 
 @section head {
     @await Html.PartialAsync("MetaHeaders", new Shared.MetaHeaders(doc) {
-       CanonicalUrl = AppConfig.PublicBaseUrl.CombineWith("posts", doc.Slug),
-       Author = author,
-       Image = image, 
+        CanonicalUrl = AppConfig.PublicBaseUrl.CombineWith("posts", doc.Slug),
+        Author = author,
+        Image = image, 
     })
 }
 
@@ -100,6 +109,7 @@
 <div class="container px-5 mb-32 mx-auto">
     @if (!string.IsNullOrEmpty(doc.Title))
     {
+        var authorHref = Blog.GetAuthorLink(author?.Name);
         var authorProfileUrl = Blog.GetAuthorProfileUrl(doc.Author);
         <article class="mt-20">
             <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-tight md:leading-none mb-12 text-center md:text-left">
@@ -107,9 +117,20 @@
             </h1>
             <div class="flex justify-between">
                 <div class="md:mb-12 flex items-center">
-                    <img class="w-12 h-12 rounded-full mr-4 text-cyan-600" src="@authorProfileUrl">
+                    @if (authorHref != null)
+                    {
+                        <a href="@authorHref"><img class="w-12 h-12 rounded-full mr-4 text-cyan-600" src="@authorProfileUrl"></a>
+                    }
+                    else
+                    {
+                        <img class="w-12 h-12 rounded-full mr-4 text-cyan-600" src="@authorProfileUrl">
+                    }
                     <div class="flex flex-col">
-                        @if (author != null)
+                        @if (authorHref != null)
+                        {
+                            <a class="text-xl font-semibold hover:underline" href="@authorHref">@author!.Name</a>
+                        }
+                        else if (author != null)
                         {
                             <span class="text-xl font-semibold">@author.Name</span>
                         }
@@ -128,7 +149,7 @@
                     <div class="mb-4 flex flex-wrap">
                         @foreach (var tag in doc.Tags)
                         {
-                            <span class="mr-2 text-xs leading-5 font-semibold bg-slate-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-slate-400/20 dark:highlight-white/5">@tag</span>
+                            <a href="@Blog.GetTagLink(tag)" class="mr-2 text-xs leading-5 font-semibold bg-slate-400/10 rounded-full py-1 px-3 flex items-center space-x-2 hover:bg-slate-400/20 dark:highlight-white/5">@tag</a>
                         }
                     </div>
                     @if (doc.Date != null)
@@ -173,13 +194,21 @@
         .ToList();
     if (author != null && authorPosts.Count > 0)
     {
+        var authorHref = Blog.GetAuthorLink(author?.Name);
         var authorProfileUrl = Blog.GetAuthorProfileUrl(doc.Author);
 
         <div class="bg-gray-50 py-20">
             <div class="max-w-3xl mx-auto">
                 <div class="flex justify-between">
                     <div>
-                        <img class="w-20 h-20 rounded-full text-cyan-600" src="@authorProfileUrl">
+                        @if (authorHref != null)
+                        {
+                            <a href="@authorHref"><img class="w-20 h-20 rounded-full text-cyan-600" src="@authorProfileUrl"></a>
+                        }
+                        else
+                        {
+                            <img class="w-20 h-20 rounded-full text-cyan-600" src="@authorProfileUrl">
+                        }
 
                         <div class="mt-2 font-medium text-2xl">
                             Written by @doc.Author
@@ -228,7 +257,14 @@
                                             </div>
                                             <div class="ml-3">
                                                 <p class="text-sm font-medium text-gray-900">
-                                                    <span>@post.Author</span>
+                                                    @if (authorHref != null)
+                                                    {
+                                                        <a href="@Blog.GetAuthorLink(post.Author!)" class="hover:underline">@post.Author</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@post.Author</span>
+                                                    }
                                                 </p>
                                                 <div class="flex space-x-1 text-sm text-gray-500">
                                                     <time datetime="@Blog.GetDateTimestamp(post.Date)">@Blog.GetDateLabel(post.Date)</time>
@@ -254,10 +290,11 @@ import { init } from "app.mjs"
 init()
 </script>
 
-<link rel="stylesheet" href="//unpkg.com/@@highlightjs/cdn-assets/styles/atom-one-dark.min.css">
+<link rel="stylesheet" href="/css/highlight.css">
 <script src="/lib/js/highlight.js"></script>
 <script>hljs.highlightAll()</script>
 <script src="/lib/js/lite-yt-embed.js"></script>
+<script src="/mjs/docs.mjs" type="module"></script>
 
 <script type="module">
 import { mount } from "app.mjs"

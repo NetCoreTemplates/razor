@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MyApp;
+namespace MyApp.Pages.Posts;
 
-public class Page : PageModel
+public class YearModel : PageModel
 {
     [FromRoute]
-    public string Slug { get; set; }
+    public int Year { get; set; }
 }

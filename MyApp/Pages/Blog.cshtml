@@ -2,7 +2,7 @@
 @attribute [RenderStatic]
 @inject MarkdownBlog Blog
 @{
-    ViewData["Title"] = "ServiceStack Blog";
+    ViewData["Title"] = "MyApp Blog";
 }
 
 <div class="container mx-auto px-5 mt-24 mb-24">
@@ -11,6 +11,7 @@
     var primaryPost = posts.FirstOrDefault();
     if (primaryPost != null)
     {
+        var authorHref = Blog.GetAuthorLink(primaryPost.Author);
         <section>
             <div class="mb-8 md:mb-16">
                 <div class="sm:mx-0">
@@ -30,10 +31,20 @@
                 </div>
                 <div>
                     <p class="text-lg leading-relaxed mb-4">@primaryPost.Summary</p>
-                    <span class="flex items-center text-xl font-bold">
-                        <img src="@Blog.GetAuthorProfileUrl(primaryPost.Author)" class="w-12 h-12 rounded-full mr-4" alt="Author">
-                        <span>@primaryPost.Author</span>
-                    </span>
+                    @if (authorHref != null)
+                    {
+                        <a class="flex items-center text-xl font-bold" href="@authorHref">
+                            <img src="@Blog.GetAuthorProfileUrl(primaryPost.Author)" class="w-12 h-12 rounded-full mr-4" alt="Author">
+                            <span>@primaryPost.Author</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="flex items-center text-xl font-bold">
+                            <img src="@Blog.GetAuthorProfileUrl(primaryPost.Author)" class="w-12 h-12 rounded-full mr-4" alt="Author">
+                            <span>@primaryPost.Author</span>
+                        </span>
+                    }
                 </div>
             </div>
         </section>
@@ -47,6 +58,7 @@
             <div class="mx-auto mt-12 grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
                 @foreach (var post in gridPosts)
                 {
+                    var authorHref = Blog.GetAuthorLink(post.Author);
                     <div class="flex flex-col overflow-hidden rounded-lg shadow-lg">
                         <div class="flex-shrink-0">
                             <a href="@Blog.GetPostLink(post)">
@@ -72,7 +84,14 @@
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm font-medium text-gray-900">
-                                        <span>@post.Author</span>
+                                        @if (authorHref != null)
+                                        {
+                                            <a href="@Blog.GetAuthorLink(post.Author!)" class="hover:underline">@post.Author</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@post.Author</span>
+                                        }
                                     </p>
                                     <div class="flex space-x-1 text-sm text-gray-500">
                                         <time datetime="@Blog.GetDateTimestamp(post.Date)">@Blog.GetDateLabel(post.Date)</time>
@@ -96,6 +115,7 @@
                 <div class="w-2/3">
                     @foreach (var post in remainingPosts)
                     {
+                        var authorHref = Blog.GetAuthorLink(post.Author);
                         <div class="border-b pb-4 mb-4">
                             <div class="flex justify-between">
                                 <div class="w-3/4">
@@ -112,7 +132,14 @@
                                         </div>
                                         <div class="ml-3">
                                             <p class="text-sm font-medium text-gray-900">
-                                                <span>@post.Author</span>
+                                                @if (authorHref != null)
+                                                {
+                                                    <a href="@Blog.GetAuthorLink(post.Author!)" class="hover:underline">@post.Author</a>
+                                                }
+                                                else
+                                                {
+                                                    <span>@post.Author</span>
+                                                }
                                             </p>
                                             <div class="flex space-x-1 text-sm text-gray-500">
                                                 <time datetime="@Blog.GetDateTimestamp(post.Date)">@Blog.GetDateLabel(post.Date)</time>
@@ -130,17 +157,25 @@
                             </div>
                         </div>
                     }
+                    @if (remainingPosts.Count >= 15)
+                    {
+                        <div class="mt-8 text-center">
+                            <a class="text-sm font-semibold hover:underline" href="@Blog.GetPostsLink()">view all posts</a>
+                        </div>
+                    }
                 </div>
                 <div class="w-1/3">
                     <div class="pl-8">
                         <div class="flex items-center">
                             <img class="w-8 h-8" src="/img/logo.svg" alt="MyApp logo">
-                            <span class="hidden sm:block text-lg font-semibold">ServiceStack</span>
+                            <span class="hidden sm:block text-lg font-semibold">MyApp</span>
                         </div>
                         <div class="p-2">
-                            <p class="text-gray-500">ServiceStack started development in 2008 with the mission of creating a 
-                                best-practices services framework with an emphasis on simplicity and speed</p>
-                            <a href="https://docs.servicestack.net/why-servicestack" class="text-sm font-medium text-gray-900 hover:underline">more information</a>
+                            <p class="text-gray-500">I’m Spencer Sharp. I live in New York City, where I design the future.</p>
+                            <a href="/about" class="text-sm font-medium text-gray-900 hover:underline">more information</a>
+                        </div>
+                        <div class="p-4">
+                            @await Html.PartialAsync("FollowLinks")
                         </div>
                     </div>
                 </div>

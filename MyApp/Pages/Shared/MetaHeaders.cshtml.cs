@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MyApp.Pages.Shared;
-
 public class MetaHeaders : PageModel
 {
     public MarkdownFileBase Doc { get; set; }

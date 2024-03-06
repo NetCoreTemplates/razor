@@ -1,12 +1,11 @@
 @tailwind base;
 @tailwind components;
 
-/* override element defaults */
-strong { font-weight:600; }
-b { font-weight:600; }
-
 /*vue*/
 [v-cloak] {display:none}
+
+/* override element defaults */
+b { font-weight:600; }
 
 /* @tailwindcss/forms css */
 [type='text'],[type='email'],[type='url'],[type='password'],[type='number'],[type='date'],[type='month'],[type='search'],[type='tel'],[type='time'],[multiple],textarea,select
@@ -53,6 +52,18 @@ select{
 [type='file']:focus{outline:1px auto -webkit-focus-ring-color;}
 
 
+/* dark mode autocomplete fields */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #ffffff;
+}
+.dark input[data-autocompleted] {
+    background-color: transparent !important;
+}
+
 /* @tailwindcss/aspect css */
 .aspect-h-9 {
     --tw-aspect-h: 9;
@@ -72,13 +83,8 @@ select{
     left: 0;
 }
 
-/* dark mode autocomplete fields */
-.dark input:-webkit-autofill,
-.dark input:-webkit-autofill:focus {
-    transition: background-color 600000s 0s, color 600000s 0s;
-}
-.dark input[data-autocompleted] {
-    background-color: transparent !important;
+[role=dialog].z-10 {
+    z-index: 60;
 }
 
 @tailwind utilities;
