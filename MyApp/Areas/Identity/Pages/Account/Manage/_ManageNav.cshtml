@@ -27,4 +27,10 @@
     <li class="@ManageNavPages.PersonalDataNavClass(ViewContext)">
         <a class="@navItemCss" asp-page="./PersonalData">Personal data</a>
     </li>
+    @if (HostContext.AppHost.HasPlugin<ApiKeysFeature>())
+    {
+        <li class="@ManageNavPages.ApiKeysNavClass(ViewContext)">
+            <a class="@navItemCss" asp-page="./ApiKeys">API Keys</a>
+        </li>
+    }
 </ul>
