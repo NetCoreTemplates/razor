@@ -25,7 +25,7 @@ public static class Css
 
 public static class CssHtmlExtensions
 {
-    public const string BaseUrl = "https://github.com/NetCoreTemplates/razor-tailwind/blob/main";
+    public const string BaseUrl = "https://github.com/NetCoreTemplates/razor/blob/main";
 
     public static IHtmlContent SrcComponent(this IHtmlHelper html, string path, string? size = null, string? cls = null) =>
         html.SrcLink($"/MyApp/wwwroot/mjs/components/{path}", size, cls);

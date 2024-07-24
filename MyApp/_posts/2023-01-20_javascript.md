@@ -379,9 +379,7 @@ let store = {
 #### Implicit Error Handling
 
 More often you'll want to take advantage of the implicit validation support in `useClient()` which makes its state available to child
-components, alleviating the need to explicitly pass it in each component as seen in razor-tailwind's 
-[Contacts.mjs](https://github.com/NetCoreTemplates/razor-tailwind/blob/main/MyApp/wwwroot/Pages/Contacts.mjs) `Edit` component for its 
-[/Contacts](https://vue-mjs.web-templates.io/Contacts) page which doesn't do any manual error handling:
+components, alleviating the need to explicitly pass it in each component as seen in this `Edit` component which doesn't do any manual error handling:
 
 ```js
 const Edit = {
@@ -533,7 +531,7 @@ function validateSafeName(e) {
 
 Whilst the code-base doesn't use TypeScript syntax in its code base directly, it still uses TypeScript's language services to enable
 static analysis for the included libraries from the TypeScript definitions included in `/lib/typings`, downloaded 
-in [postinstall.js](https://github.com/NetCoreTemplates/razor-tailwind/blob/main/MyApp/postinstall.js) after installing the template.
+in [postinstall.js](https://github.com/NetCoreTemplates/razor/blob/main/MyApp/postinstall.js) after installing the template.
 
 ### Import Maps
 
