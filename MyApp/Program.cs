@@ -65,8 +65,9 @@ services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-// Add application services.
 services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+// Uncomment to send emails with SMTP, configure SMTP with "SmtpConfig" in appsettings.json
+// services.AddSingleton<IEmailSender<ApplicationUser>, EmailSender>();
 services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AdditionalUserClaimsPrincipalFactory>();
 
 // Register all services
