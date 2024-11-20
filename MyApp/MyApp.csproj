@@ -6,7 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <PublishProfile>DefaultContainer</PublishProfile>
-  </PropertyGroup>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ContainerLabel Include="service" Value="my-app" />
+    </ItemGroup>
 
   <ItemGroup>
     <Using Include="MyApp" />
