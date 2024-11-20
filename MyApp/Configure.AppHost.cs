@@ -19,7 +19,6 @@ public class AppHost() : AppHostBase("MyApp"), IHostingStartup
     public override void Configure()
     {
         SetConfig(new HostConfig {
-            DebugMode = true
         });
         
         //Allow Referencing in #Script expressions, e.g. [Input(EvalAllowableEntries)]
