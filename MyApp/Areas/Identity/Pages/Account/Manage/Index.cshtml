@@ -19,13 +19,13 @@
                 <div class="flex flex-col gap-y-4">
                     <div>
                         <label asp-for="Username" class="block text-sm font-medium text-gray-700 dark:text-gray-300"></label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="mt-1 relative">
                             <input type="text" class="@Css.InputText" asp-for="Username" disabled>
                         </div>
                     </div>
                     <div>
                         <label asp-for="Input.PhoneNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300"></label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="mt-1 relative">
                             <input type="text" class="@Css.InputText" asp-for="Input.PhoneNumber">
                         </div>
                         <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>

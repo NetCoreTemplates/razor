@@ -34,7 +34,7 @@
                     {
                         <div>
                             <label asp-for="Email" class="@Css.LabelClasses"></label>
-                            <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="mt-1 relative">
                                 <input asp-for="Email" class="@Css.InputText" placeholder="Please enter your email." disabled />
                             </div>
                             <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="mt-2 @Css.SecondaryButton">Send verification email</button>
@@ -42,7 +42,7 @@
                     }
                     <div>
                         <label for="new-email" class="@Css.LabelClasses">New email</label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="mt-1 relative">
                             <input asp-for="Input.NewEmail" class="@Css.InputText" autocomplete="email" aria-required="true" placeholder="Please enter new email." />
                         </div>
                         <span asp-validation-for="Input.NewEmail" class="mt-2 text-danger text-sm"></span>

@@ -18,7 +18,7 @@
                 <div class="flex flex-col gap-y-4">
                     <div>
                         <label asp-for="Input.TwoFactorCode" class="@Css.LabelClasses" />
-                        <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="mt-1 relative">
                             <input type="text" asp-for="Input.TwoFactorCode" class="@Css.InputText" autocomplete="off" />
                         </div>
                         <span asp-validation-for="Input.TwoFactorCode" class="mt-2 text-danger text-sm"></span>

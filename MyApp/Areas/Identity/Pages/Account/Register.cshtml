@@ -15,21 +15,21 @@
                 <div class="flex flex-col gap-y-4">
                     <div>
                         <label asp-for="Input.Email" class="block text-sm font-medium text-gray-700 dark:text-gray-300"></label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="mt-1 relative">
                             <input type="text" class="@Css.InputText" asp-for="Input.Email" spellcheck="false">
                         </div>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div>
                         <label asp-for="Input.Password" class="block text-sm font-medium text-gray-700 dark:text-gray-300"></label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="mt-1 relative">
                             <input type="password" class="@Css.InputText" asp-for="Input.Password" spellcheck="false">
                         </div>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
                     <div>
                         <label asp-for="Input.ConfirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300"></label>
-                        <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="mt-1 relative">
                             <input type="password" class="@Css.InputText" asp-for="Input.ConfirmPassword" spellcheck="false">
                         </div>
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
